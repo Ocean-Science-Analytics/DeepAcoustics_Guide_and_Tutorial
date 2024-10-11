@@ -1,0 +1,48 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "DeepAcoustics Guide and Tutorial"
+  sidebar:
+    style: "docked"
+    search: true
+    collapse-level: 1
+    background: primary
+    logo: images/DeepAcoustics.png
+    contents:
+        - text: "About DeepAcoustics"
+          href: DA.qmd
+        - text: "Deep Learning"
+          href: background.qmd
+        - section: "Data Management & Annotation"
+          href: data_manage_annotate.qmd
+          contents: 
+            - text: "Preparing Your Data"
+              href: prep.qmd
+            - text: "Data Import" 
+              href: import.qmd
+            - text: "Annotation" 
+              href: annotate.qmd
+        - section: "Network Training & Testing"
+          href: training_testing.qmd  
+          contents: 
+            - text: "Creating Training Images"
+              href: image_creation.qmd
+            - text: "Network Training"
+              href: train.qmd
+            - text: "Performance Testing"
+              href: test.qmd
+            - text: "Processing & Outputs"
+              href: outputs.qmd
+        - text: "Tutorial"
+          href: tutorial.qmd  
+          
+format:
+  html:
+    theme: lux
+    css: styles.css
+    toc: true
+
+editor: visual
+

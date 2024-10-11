@@ -1,0 +1,11 @@
+/* css styles */
+
+/* Change color only when hovering over a sidebar menu item */
+.quarto-sidebar .nav-item a:hover {
+    color: #d7bde2; !important; /* Ensures the hover color is applied * Replace with your preferred hover color
+}
+
+/* Optionally change color of the active menu item */
+.quarto-sidebar .nav-item a.active {
+    color: #8e44ad; !important; /* Replace with your preferred active item color */
+}
