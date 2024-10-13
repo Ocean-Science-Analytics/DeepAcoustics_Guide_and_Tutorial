@@ -10,5 +10,5 @@ For more information on DeepSqueak, please visit the [repository on GitHub](http
 
 The DeepAcoustics tool and guide/tutorial can be found at:
 
-[DeepAcoustics Software] (https://github.com/Ocean-Science-Analytics/DeepAcoustics)
-[DeepAcoustics Guide and Tutorial] (
+[DeepAcoustics Software](https://github.com/Ocean-Science-Analytics/DeepAcoustics)
+[DeepAcoustics Guide and Tutorial](https://ocean-science-analytics.github.io/DeepAcoustics_Guide_and_Tutorial/DA.html)
