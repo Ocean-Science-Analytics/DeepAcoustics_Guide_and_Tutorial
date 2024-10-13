@@ -13,7 +13,7 @@ website:
     contents:
         - text: "About DeepAcoustics"
           href: DA.qmd
-        - text: "Deep Learning"
+        - text: "Deep Learning Methods"
           href: background.qmd
         - section: "Data Management & Annotation"
           href: data_manage_annotate.qmd

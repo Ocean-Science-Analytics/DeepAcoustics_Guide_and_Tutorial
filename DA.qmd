@@ -4,6 +4,6 @@ title: ""
 
 ![](images/DA_Cover.png){fig-alt="DA Cover Image" fig-align="center" width="757"}
 
-DeepAcoustics is an open-access, MATLAB-based tool that was modified from a program called DeepSqueak ([Coffey et al., 2019](https://www.nature.com/articles/s41386-018-0303-6)). Originally designed for use with ultrasonic calls from rats for neurological studies, our modification of the program has led to an independent version of the software that is optimized to detect calls in noisier, underwater environments. Additional modifications to the classification capabilities are incorporated in DeepAcoustics.
+DeepAcoustics is an open-access, MATLAB-based tool that was modified from a program called DeepSqueak ([Coffey et al., 2019](https://www.nature.com/articles/s41386-018-0303-6)). Originally designed for use with ultrasonic calls from rats for neurological studies, our modification of the program has led to an independent version of the software that is optimized to detect calls in noisier, underwater environments. Additional modifications to the classification capabilities are incorporated in DeepAcoustics. For more information on DeepSqueak, please visit the repository on [GitHub](https://github.com/DrCoffey/DeepSqueak).
 
 DeepAcoustics Overview:
