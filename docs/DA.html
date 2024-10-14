@@ -35,10 +35,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -114,7 +114,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./background.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Deep Learning</span></a>
+ <span class="menu-text">Deep Learning Methods</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -193,7 +193,14 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#software-requirements" id="toc-software-requirements" class="nav-link active" data-scroll-target="#software-requirements"><strong>Software Requirements:</strong></a></li>
+  <li><a href="#gpu-requirements" id="toc-gpu-requirements" class="nav-link" data-scroll-target="#gpu-requirements"><strong>GPU Requirements:</strong></a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -207,9 +214,29 @@ ul.task-list li input[type="checkbox"] {
 </figure>
 </div>
 <p>DeepAcoustics is an open-access, MATLAB-based tool that was modified from a program called DeepSqueak (<a href="https://www.nature.com/articles/s41386-018-0303-6">Coffey et al., 2019</a>). Originally designed for use with ultrasonic calls from rats for neurological studies, our modification of the program has led to an independent version of the software that is optimized to detect calls in noisier, underwater environments. Additional modifications to the classification capabilities are incorporated in DeepAcoustics. For more information on DeepSqueak, please visit the repository on <a href="https://github.com/DrCoffey/DeepSqueak">GitHub</a>.</p>
-<p>DeepAcoustics Overview:</p>
+<hr>
+<section id="software-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="software-requirements"><strong>Software Requirements:</strong></h3>
+<p>DeepAcoustics is developed in MATLAB and utilizes the streamlined integration of deep learning modules along with the YOLO (“You Only Look Once”) object detection model, specifically version 4. While this version is not as advanced as Python’s YOLO v9, it offers robust performance for bioacoustic applications. DeepAcoustics requires MATLAB version R2023b or higher, as it leverages the App Designer feature to support the graphical user interface. To run DeepAcoustics, the following are required:</p>
+<ul>
+<li><p>MATLAB version R2023b or higher</p></li>
+<li><p>Deep Learning Toolbox</p></li>
+<li><p>Computer Vision Toolbox</p></li>
+<li><p>Signal Processing Toolbox</p></li>
+<li><p>Parallel Computing Toolbox (for GPU support)</p></li>
+<li><p>Statistics and Machine Learning Toolbox</p></li>
+</ul>
+<p>These requirements ensure optimal performance and efficient handling of deep learning tasks within the software.</p>
+<hr>
+</section>
+<section id="gpu-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="gpu-requirements"><strong>GPU Requirements:</strong></h3>
+<p>A GPU (Graphics Processing Unit) is a specialized hardware component designed to handle complex mathematical calculations, especially those related to graphics rendering and parallel processing tasks. While GPUs were originally developed for rendering images and videos in gaming and 3D applications, their architecture has made them highly effective for tasks that involve large-scale matrix and vector operations, which are common in deep learning.</p>
+<p>Deep learning tasks, such as training neural networks, require the processing of vast amounts of data and the performance of many computations simultaneously. These tasks involve operations like multiplying large matrices (weights and inputs), calculating gradients, and updating model parameters across multiple layers of the network. CPUs (Central Processing Units) can handle these tasks but are optimized for sequential processing, meaning they are generally slower when performing the parallelized operations deep learning demands. GPUs, on the other hand, are designed to process thousands of operations in parallel, making them much faster for deep learning tasks. This capability is essential when working with large datasets and complex models, such as convolutional neural networks (CNNs) or object detection models like YOLO, where speed and efficiency are crucial. By using GPUs, deep learning models can be trained faster and more efficiently, significantly reducing the time needed for both training and inference, particularly when working with large-scale or real-time applications.</p>
+<p>A modern GPU with CUDA support is required for training networks in DeepAcoustics, but is not required for using a trained network model to detect target calls in audio using DeepAcoustics.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -6,4 +6,32 @@ title: ""
 
 DeepAcoustics is an open-access, MATLAB-based tool that was modified from a program called DeepSqueak ([Coffey et al., 2019](https://www.nature.com/articles/s41386-018-0303-6)). Originally designed for use with ultrasonic calls from rats for neurological studies, our modification of the program has led to an independent version of the software that is optimized to detect calls in noisier, underwater environments. Additional modifications to the classification capabilities are incorporated in DeepAcoustics. For more information on DeepSqueak, please visit the repository on [GitHub](https://github.com/DrCoffey/DeepSqueak).
 
-DeepAcoustics Overview:
+------------------------------------------------------------------------
+
+### **Software Requirements:** 
+
+DeepAcoustics is developed in MATLAB and utilizes the streamlined integration of deep learning modules along with the YOLO ("You Only Look Once") object detection model, specifically version 4. While this version is not as advanced as Python’s YOLO v9, it offers robust performance for bioacoustic applications. DeepAcoustics requires MATLAB version R2023b or higher, as it leverages the App Designer feature to support the graphical user interface. To run DeepAcoustics, the following are required:
+
+-   MATLAB version R2023b or higher
+
+-   Deep Learning Toolbox
+
+-   Computer Vision Toolbox
+
+-   Signal Processing Toolbox
+
+-   Parallel Computing Toolbox (for GPU support)
+
+-   Statistics and Machine Learning Toolbox
+
+These requirements ensure optimal performance and efficient handling of deep learning tasks within the software.
+
+------------------------------------------------------------------------
+
+### **GPU Requirements:** 
+
+A GPU (Graphics Processing Unit) is a specialized hardware component designed to handle complex mathematical calculations, especially those related to graphics rendering and parallel processing tasks. While GPUs were originally developed for rendering images and videos in gaming and 3D applications, their architecture has made them highly effective for tasks that involve large-scale matrix and vector operations, which are common in deep learning.
+
+Deep learning tasks, such as training neural networks, require the processing of vast amounts of data and the performance of many computations simultaneously. These tasks involve operations like multiplying large matrices (weights and inputs), calculating gradients, and updating model parameters across multiple layers of the network. CPUs (Central Processing Units) can handle these tasks but are optimized for sequential processing, meaning they are generally slower when performing the parallelized operations deep learning demands. GPUs, on the other hand, are designed to process thousands of operations in parallel, making them much faster for deep learning tasks. This capability is essential when working with large datasets and complex models, such as convolutional neural networks (CNNs) or object detection models like YOLO, where speed and efficiency are crucial. By using GPUs, deep learning models can be trained faster and more efficiently, significantly reducing the time needed for both training and inference, particularly when working with large-scale or real-time applications.
+
+A modern GPU with CUDA support is required for training networks in DeepAcoustics, but is not required for using a trained network model to detect target calls in audio using DeepAcoustics.
