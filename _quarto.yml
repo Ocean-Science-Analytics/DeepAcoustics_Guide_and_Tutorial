@@ -40,7 +40,7 @@ website:
           
 format:
   html:
-    theme: darkly
+    theme: lux
     css: styles.css
     toc: true
 

@@ -1,11 +1,107 @@
 /* css styles */
 
-/* Change color only when hovering over a sidebar menu item */
-.quarto-sidebar .nav-item a:hover {
-    color: #d7bde2; !important; /* Ensures the hover color is applied * Replace with your preferred hover color
+/* ============================= */
+/* Bold and Italic Text Styling (Normal Text Only) */
+/* ============================= */
+
+/* Bold text: <b> and <strong> */
+p b, p strong, li b, li strong {
+    font-weight: bold !important;  /* Ensure bold text renders */
+    font-size: 1.1em !important;  /* Slightly larger for emphasis */
+    color: #004080 !important;  /* Dark blue for bold text */
 }
 
-/* Optionally change color of the active menu item */
-.quarto-sidebar .nav-item a.active {
-    color: #8e44ad; !important; /* Replace with your preferred active item color */
+/* Italic text: <i> and <em> */
+i, em {
+    font-style: italic !important;  /* Ensure italic text renders */
+    color: inherit;  /* Use the same color as surrounding text */
+}
+
+/* ============================= */
+/* Headings in Content (h1–h6) Styling */
+/* ============================= */
+
+/* Heading 1: Deepest Magenta */
+h1 {
+    color: #720072 !important;  /* Deep plum-magenta */
+    font-weight: bold;
+}
+
+/* Heading 2: Slightly Lighter Magenta */
+h2 {
+    color: #8B008B !important;  /* Deep magenta */
+    font-weight: bold;
+}
+
+/* Heading 3: Moderate Magenta */
+h3 {
+    color: #A042A0 !important;  /* Moderate magenta */
+    font-weight: bold;
+}
+
+/* Heading 4: Subtle Magenta */
+h4 {
+    color: #B060B0 !important;  /* Subtle magenta */
+    font-weight: bold;
+}
+
+/* Heading 5: Softer Magenta */
+h5 {
+    color: #C07AC0 !important;  /* Softer magenta */
+    font-weight: bold;
+}
+
+/* Heading 6: Lightest Magenta */
+h6 {
+    color: #D094D0 !important;  /* Lightest magenta */
+    font-weight: bold;
+}
+
+/* ============================= */
+/* Sidebar Links Styling */
+/* ============================= */
+
+/* Sidebar Links: Default (Inactive) State */
+.sidebar-link {
+    color: #FFFFFF !important;  /* White for inactive links */
+    text-decoration: none;
+}
+
+/* Sidebar Links: Hover State */
+.sidebar-link:hover {
+    color: #d7bde2 !important;  /* Light purple (lavender) on hover */
+    text-decoration: none !important;
+}
+
+/* Sidebar Links: Active State (Current Page) */
+.sidebar-link.active {
+    color: #8B008B !important;  /* Deep magenta for active item */
+    font-weight: bold !important;
+    border-left: 3px solid #8B008B !important;
+    padding-left: 8px !important;
+}
+
+/* ============================= */
+/* Upper-Right TOC ("On This Page") Links Styling */
+/* ============================= */
+
+/* Default TOC Links (Inactive) */
+.quarto-toc a {
+    color: inherit !important;  /* Inherit normal text color */
+    font-weight: normal !important;  /* No bold text */
+    text-decoration: none !important;  /* No underline */
+}
+
+/* Hover State for TOC Links */
+.quarto-toc a:hover {
+    color: #d7bde2 !important;  /* Light purple on hover */
+    text-decoration: none !important;
+}
+
+/* Active State for TOC Links (Current Section) */
+.quarto-toc a.active {
+    color: inherit !important;  /* Normal text color */
+    font-weight: normal !important;  /* No bold */
+    border-left: none !important;  /* No border */
+    padding-left: 0 !important;  /* No extra padding */
 }
