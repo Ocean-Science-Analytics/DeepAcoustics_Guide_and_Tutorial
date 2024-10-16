@@ -12,7 +12,7 @@ Modifications to DeepAcoustics allowed for a broadened scope that prioritizes **
 
 -   **Increased user interactivity** in image creation, network training, and multiclass sound detection—ideal for analyzing overlapping call types across bandwidths.
 
--   **Support for large audio file sizes** and **integration with Raven selection tables**, often used for marine call annotation.
+-   **Support for custom duration audio file sizes** and **integration with Raven selection tables**, often used for marine call annotation.
 
 -   **Processing of large acoustic datasets**, with the ability to extract date and time stamps directly from file names for streamlined data management.
 
