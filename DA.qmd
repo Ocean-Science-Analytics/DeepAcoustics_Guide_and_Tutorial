@@ -70,7 +70,7 @@ Access [DeepAcoustics](https://github.com/Ocean-Science-Analytics/DeepAcoustics)
 
 If you encounter any issues or have questions about DeepAcoustics, please visit the [DeepAcoustics Software Issues](https://github.com/Ocean-Science-Analytics/DeepAcoustics/issues) section. To help us resolve problems efficiently, include the following details when reporting an issue:
 
--   **DeepAcoustics version** you're using
+-   **MATLAB version** you're using
 
 -   **Platform and OS version** (e.g., Windows 11, macOS Ventura)
 
