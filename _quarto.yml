@@ -35,6 +35,13 @@ website:
               href: test.qmd
             - text: "Processing & Outputs"
               href: outputs.qmd
+        - section: "Classification"
+          href: classification.qmd  
+          contents: 
+            - text: "Clustering Data"
+              href: cluster.qmd
+            - text: "Evaluating Clusters"
+              href: cluster_evaluate.qmd
         - text: "Tutorial"
           href: tutorial.qmd  
           

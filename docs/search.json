@@ -45,5 +45,27 @@
     "crumbs": [
       "About DeepAcoustics"
     ]
+  },
+  {
+    "objectID": "cluster.html",
+    "href": "cluster.html",
+    "title": "cluster",
+    "section": "",
+    "text": "dfd",
+    "crumbs": [
+      "Classification",
+      "Clustering Data"
+    ]
+  },
+  {
+    "objectID": "cluster_evaluate.html",
+    "href": "cluster_evaluate.html",
+    "title": "cluster_evaluate",
+    "section": "",
+    "text": "dfd",
+    "crumbs": [
+      "Classification",
+      "Evaluating Clusters"
+    ]
   }
 ]

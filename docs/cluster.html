@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>DeepAcoustics Guide and Tutorial -</title>
+<title>DeepAcoustics Guide and Tutorial - cluster</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -80,7 +80,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./DA.html">About DeepAcoustics</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./classification.html">Classification</a></li><li class="breadcrumb-item"><a href="./cluster.html">Clustering Data</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -107,7 +107,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./DA.html" class="sidebar-item-text sidebar-link active">
+  <a href="./DA.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">About DeepAcoustics</span></a>
   </div>
 </li>
@@ -185,14 +185,14 @@ ul.task-list li input[type="checkbox"] {
       <div class="sidebar-item-container"> 
             <a href="./classification.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Classification</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cluster.html" class="sidebar-item-text sidebar-link">
+  <a href="./cluster.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Clustering Data</span></a>
   </div>
 </li>
@@ -216,99 +216,33 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#software-requirements" id="toc-software-requirements" class="nav-link active" data-scroll-target="#software-requirements">Software Requirements:</a></li>
-  <li><a href="#gpu-requirements" id="toc-gpu-requirements" class="nav-link" data-scroll-target="#gpu-requirements">GPU Requirements:</a></li>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting Started</a></li>
-  <li><a href="#how-to-get-help" id="toc-how-to-get-help" class="nav-link" data-scroll-target="#how-to-get-help">How to Get Help</a></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/DA_Cover.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="DA Cover Image" width="757"></p>
-</figure>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./classification.html">Classification</a></li><li class="breadcrumb-item"><a href="./cluster.html">Clustering Data</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">cluster</h1>
 </div>
-<p>DeepAcoustics is an open-access, MATLAB-based tool that was modified from a program called DeepSqueak (<a href="https://www.nature.com/articles/s41386-018-0303-6">Coffey et al., 2019</a>). Originally designed for use with ultrasonic calls from rats for neurological studies, our modification of the program has led to an independent version of the software that is optimized to detect calls in noisier, underwater environments. Additional modifications to the classification capabilities are incorporated in DeepAcoustics.</p>
-<p>Modifications to DeepAcoustics allowed for a broadened scope that prioritizes <strong>underwater acoustic environments and species</strong>, while still accommodating <strong>in-air terrestrial counterparts</strong>. These enhancements extend the tool’s functionality beyond previous platforms, such as DeepSqueak, with key improvements including:</p>
-<ul>
-<li><p><strong>Access to wider bandwidth</strong>, including low frequencies that were not previously required for DeepSqueak.</p></li>
-<li><p><strong>Increased user interactivity</strong> in image creation, network training, and multiclass sound detection—ideal for analyzing overlapping call types across bandwidths.</p></li>
-<li><p><strong>Support for large audio file sizes</strong> and <strong>integration with Raven selection tables</strong>, often used for marine call annotation.</p></li>
-<li><p><strong>Processing of large acoustic datasets</strong>, with the ability to extract date and time stamps directly from file names for streamlined data management.</p></li>
-<li><p><strong>Ongoing advancements in classification capabilities</strong>, ensuring the tool stays at the forefront of bioacoustic research.</p></li>
-</ul>
-<p>These modifications build on the <strong>intuitive graphical user interface (GUI)</strong> originally developed by Coffey et al., ensuring DeepAcoustics remains accessible to users with varying levels of bioacoustic expertise. It provides a powerful, flexible deep learning tool that simplifies network training and deployment, empowering researchers to tackle both marine and terrestrial acoustic challenges efficiently.</p>
-<p>For access to this software, please visit the <a href="https://github.com/Ocean-Science-Analytics/DeepAcoustics">DeepAcoustics</a> repository.</p>
-<p>For more information on the original tool developed by Dr.&nbsp;Kevin Coffey, please visit the <a href="https://github.com/DrCoffey/DeepSqueak">DeepSqueak</a> repository.</p>
-<hr>
-<section id="software-requirements" class="level3">
-<h3 class="anchored" data-anchor-id="software-requirements">Software Requirements:</h3>
-<p>DeepAcoustics is developed in MATLAB and utilizes the streamlined integration of deep learning modules along with the YOLO (“You Only Look Once”) object detection model, specifically version 4. While this version is not as advanced as Python’s YOLO v9, it offers robust performance for bioacoustic applications. DeepAcoustics requires MATLAB version R2023b or higher, as it leverages the App Designer feature to support the graphical user interface. To run DeepAcoustics, the following are required:</p>
-<ul>
-<li><p>MATLAB version R2023b or higher</p></li>
-<li><p>Deep Learning Toolbox</p></li>
-<li><p>Computer Vision Toolbox</p></li>
-<li><p>Signal Processing Toolbox</p></li>
-<li><p>Parallel Computing Toolbox (for GPU support)</p></li>
-<li><p>Statistics and Machine Learning Toolbox</p></li>
-</ul>
-<p>These requirements ensure optimal performance and efficient handling of deep learning tasks within the software.</p>
-<hr>
-</section>
-<section id="gpu-requirements" class="level3">
-<h3 class="anchored" data-anchor-id="gpu-requirements">GPU Requirements:</h3>
-<p>A GPU (Graphics Processing Unit) is a specialized hardware component designed to handle complex mathematical calculations, especially those related to graphics rendering and parallel processing tasks. While GPUs were originally developed for rendering images and videos in gaming and 3D applications, their architecture has made them highly effective for tasks that involve large-scale matrix and vector operations, which are common in deep learning.</p>
-<p>Deep learning tasks, such as training neural networks, require the processing of vast amounts of data and the performance of many computations simultaneously. These tasks involve operations like multiplying large matrices (weights and inputs), calculating gradients, and updating model parameters across multiple layers of the network. CPUs (Central Processing Units) can handle these tasks but are optimized for sequential processing, meaning they are generally slower when performing the parallelized operations deep learning demands. GPUs, on the other hand, are designed to process thousands of operations in parallel, making them much faster for deep learning tasks. This capability is essential when working with large datasets and complex models, such as convolutional neural networks (CNNs) or object detection models like YOLO, where speed and efficiency are crucial. By using GPUs, deep learning models can be trained faster and more efficiently, significantly reducing the time needed for both training and inference, particularly when working with large-scale or real-time applications.</p>
-<p>A modern GPU with CUDA support is required for training networks in DeepAcoustics, but is not required for using a trained network model to detect target calls in audio using DeepAcoustics.</p>
-<hr>
-</section>
-<section id="getting-started" class="level3">
-<h3 class="anchored" data-anchor-id="getting-started">Getting Started</h3>
-<p>This documentation takes users through the features of DeepAcoustics, and then includes a tutorial that users can use for further exploration of this deep learning GUI. Please begin by downloading DeepAcoustics from the GitHub repository below. Then open MATLAB, set the path to the folder you downloaded the software to, and use the word “DeepAcoustics” to call the tool. We recommend using GitHub Desktop to streamline the incorporation of updates to the software.</p>
-<p>Access <a href="https://github.com/Ocean-Science-Analytics/DeepAcoustics">DeepAcoustics</a></p>
-<hr>
-</section>
-<section id="how-to-get-help" class="level3">
-<h3 class="anchored" data-anchor-id="how-to-get-help">How to Get Help</h3>
-<section id="software-issues" class="level4">
-<h4 class="anchored" data-anchor-id="software-issues"><strong>Software Issues</strong></h4>
-<p>If you encounter any issues or have questions about DeepAcoustics, please visit the <a href="https://github.com/Ocean-Science-Analytics/DeepAcoustics/issues">DeepAcoustics Software Issues</a> section. To help us resolve problems efficiently, include the following details when reporting an issue:</p>
-<ul>
-<li><p><strong>MATLAB version</strong> you’re using</p></li>
-<li><p><strong>Platform and OS version</strong> (e.g., Windows 11, macOS Ventura)</p></li>
-<li><p><strong>Steps or code</strong> that triggered the issue</p></li>
-<li><p><strong>What happened</strong> vs.&nbsp;<strong>what you expected</strong></p></li>
-<li><p>Any <strong>error messages or unusual behavior</strong></p></li>
-<li><p>Apply the appropriate <strong>description in the title</strong> (e.g., “Training Bug”)</p></li>
-</ul>
-</section>
-<section id="discussions" class="level4">
-<h4 class="anchored" data-anchor-id="discussions"><strong>Discussions</strong></h4>
-<p>For general inquiries, ideas, or feedback that don’t fit into an issue report, use the <a href="https://github.com/Ocean-Science-Analytics/DeepAcoustics/discussions">Discussions</a> section. This space is ideal for:</p>
-<ul>
-<li><p>Sharing <strong>ideas or suggestions</strong> for new features</p></li>
-<li><p>Discussing <strong>best practices</strong> for using the software effectively</p></li>
-<li><p><strong>Engaging with other users</strong> to ask questions or share insights</p></li>
-</ul>
-<p>Both sections are monitored to ensure you receive timely support and can connect with the broader DeepAcoustics community.</p>
-<hr>
-<p><strong>Software Developers</strong>: Gabi Alongi, Peter Sugarman, Liz Ferguson, Jennifer Pettis Schallert, and original <a href="https://github.com/DrCoffey/DeepSqueak">DeepSqueak Development</a> by Ruby Marx, Kevin Coffey, Robert Ciszek, &amp; Leonardo Lara-Valderrábano</p>
-<p>© Tutorial Copyright 2024 Ocean Science Analytics</p>
-<p>Built with <a href="https://quarto.org/">Quarto</a> using modified Lux theme</p>
 
 
-</section>
-</section>
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>dfd</p>
+
+
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
