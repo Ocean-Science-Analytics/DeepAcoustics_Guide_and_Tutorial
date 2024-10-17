@@ -94,7 +94,7 @@ Both sections are monitored to ensure you receive timely support and can connect
 
 ------------------------------------------------------------------------
 
-**Development:** DeepAcoustics is a joint accessible tool venture development lead by [Acoustic Interactions](https://acousticinteractions.org/vision-mission) and supported by [Ocean Science Analytics](https://www.oceanscienceanalytics.com/).
+**Development:** DeepAcoustics is a joint accessible tool venture development lead by [Acoustic Interactions](https://acousticinteractions.org/vision-mission) and [Ocean Science Analytics](https://www.oceanscienceanalytics.com/).
 
 **Software Developers**: Gabi Alongi, Peter Sugarman, Liz Ferguson, Jennifer Pettis Schallert, and original [DeepSqueak Development](https://github.com/DrCoffey/DeepSqueak) by Ruby Marx, Kevin Coffey, Robert Ciszek, & Leonardo Lara-Valderrábano
 
