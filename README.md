@@ -15,3 +15,7 @@ The DeepAcoustics tool and guide/tutorial can be found at:
 
 
 For more information on DeepSqueak, please visit the [repository on GitHub](https://github.com/DrCoffey/DeepSqueak). 
+
+
+DeepAcoustics is a joint accessible tool venture development lead by [Acoustic Interactions](https://acousticinteractions.org/) and supported by [Ocean Science Analytics](https://www.oceanscienceanalytics.com/)
+Software Developers: Gabi Alongi, Peter Sugarman, Liz Ferguson, Jennifer Pettis Schallert, and original DeepSqueak Development by Ruby Marx, Kevin Coffey, Robert Ciszek, & Leonardo Lara-Valderrábano
