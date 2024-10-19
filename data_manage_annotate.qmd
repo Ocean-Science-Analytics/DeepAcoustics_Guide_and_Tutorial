@@ -1,5 +1,0 @@
----
-title: "Data Management and Annotation"
----
-
-ADD Background about bounding box annotation, etc. with figure.

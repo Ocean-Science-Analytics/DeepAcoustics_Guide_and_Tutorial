@@ -1,0 +1,21 @@
+---
+title: "GUI Overview"
+---
+
+The file menu consists of options for doing things:
+
+-   Select Network Folder
+
+-   Select Audio Folder
+
+-   Load Detections
+
+-   Load Annotations
+
+-   Change Playback Rate
+
+-   Change Contour Threshold
+
+-   Save Session
+
+-   Import/Export:

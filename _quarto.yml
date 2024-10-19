@@ -15,14 +15,14 @@ website:
           href: DA.qmd
         - text: "Deep Learning Methods"
           href: background.qmd
-        - section: "Data Management & Annotation"
-          href: data_manage_annotate.qmd
+        - section: "Getting started"
+          href: gui_overview.qmd
           contents: 
             - text: "Preparing Your Data"
               href: prep.qmd
             - text: "Data Import" 
               href: import.qmd
-            - text: "Annotation" 
+            - text: "Annotation Review" 
               href: annotate.qmd
         - section: "Network Training & Testing"
           href: training_testing.qmd  

@@ -6,7 +6,7 @@ title: ""
 
 DeepAcoustics is an open-access, MATLAB-based tool that was modified from a program called DeepSqueak ([Coffey et al., 2019](https://www.nature.com/articles/s41386-018-0303-6)). Originally designed for use with ultrasonic calls from rats for neurological studies, our modification of the program has led to an independent version of the software that is optimized to detect calls in noisier, underwater environments. Additional modifications to the classification capabilities are incorporated in DeepAcoustics.
 
-Modifications to DeepAcoustics allowed for a broadened scope that prioritizes **underwater acoustic environments and species**, while still accommodating **in-air terrestrial counterparts**. These enhancements extend the tool’s functionality beyond previous platforms, such as DeepSqueak, with key improvements including:
+Modifications to DeepAcoustics allowed for a broadened scope that prioritizes **underwater acoustic environments and species**, while still accommodating **in-air terrestrial counterparts**. These enhancements extend the tool’s functionality, with key improvements including:
 
 -   **Access to wider bandwidth**, including low frequencies that were not previously required for DeepSqueak.
 
@@ -22,13 +22,11 @@ These modifications build on the **intuitive graphical user interface (GUI)** or
 
 For access to this software, please visit the [DeepAcoustics](https://github.com/Ocean-Science-Analytics/DeepAcoustics) repository.
 
-For more information on the original tool developed by Dr. Kevin Coffey, please visit the [DeepSqueak](https://github.com/DrCoffey/DeepSqueak) repository.
-
 ------------------------------------------------------------------------
 
 ### Software Requirements:
 
-DeepAcoustics is developed in MATLAB and utilizes the streamlined integration of deep learning modules along with the YOLO ("You Only Look Once") object detection model, specifically version 4. While this version is not as advanced as Python’s YOLO v9, it offers robust performance for bioacoustic applications. DeepAcoustics requires MATLAB version R2023b or higher, as it leverages the App Designer feature to support the graphical user interface. To run DeepAcoustics, the following are required:
+DeepAcoustics is developed in MATLAB and utilizes the streamlined integration of deep learning modules along with the YOLO ("You Only Look Once") object detection model, specifically version 4. While this version is not as advanced as Python’s YOLO v9, it offers robust performance for bioacoustic applications. To run DeepAcoustics, the following are required:
 
 -   MATLAB version R2023b or higher
 
@@ -98,7 +96,7 @@ Both sections are monitored to ensure you receive timely support and can connect
 
 ------------------------------------------------------------------------
 
-**Development:** DeepAcoustics is a joint accessible tool venture development lead by [Acoustic Interactions](https://acousticinteractions.org/vision-mission) and supported by [Ocean Science Analytics](https://www.oceanscienceanalytics.com/).
+**Development:** DeepAcoustics is a joint accessible tool venture development lead by [Acoustic Interactions](https://acousticinteractions.org/vision-mission) and [Ocean Science Analytics](https://www.oceanscienceanalytics.com/).
 
 **Software Developers**: Gabi Alongi, Peter Sugarman, Liz Ferguson, Jennifer Pettis Schallert, and original [DeepSqueak Development](https://github.com/DrCoffey/DeepSqueak) by Ruby Marx, Kevin Coffey, Robert Ciszek, & Leonardo Lara-Valderrábano
 
