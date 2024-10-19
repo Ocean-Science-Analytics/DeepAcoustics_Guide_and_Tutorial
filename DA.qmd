@@ -62,6 +62,8 @@ This documentation takes users through the features of DeepAcoustics, and then i
 
 Access [DeepAcoustics](https://github.com/Ocean-Science-Analytics/DeepAcoustics)
 
+![](images/start-DA.jpg){fig-alt="Starting DeepAcoustics" fig-align="center"}
+
 ------------------------------------------------------------------------
 
 ### How to Get Help
