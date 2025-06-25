@@ -1,5 +1,5 @@
 ---
-title: "BioAcoustics & Deep Learning"
+title: "Bioacoustics & Deep Learning"
 ---
 
 ### Deep Learning Methods
