@@ -1,3 +1,17 @@
 ---
-title: "prep"
+title: "Preparing Your Data"
 ---
+
+### Bounding Box Annotation for Object Detection
+
+ADD Background about bounding box annotation, etc. with figure.
+
+DeepAcoustics can accept data from different places. Most common Raven.
+
+### Raven Selection Table
+
+Your table should be nice
+
+Need to add an annotation column labeled "Annotation"
+
+![](images/selection-table-annotation.jpg){fig-align="center"}
