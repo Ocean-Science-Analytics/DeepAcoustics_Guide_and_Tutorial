@@ -1,6 +1,6 @@
 ## DeepAcoustics Guide & Tutorial
 
-![](images/DA_OpeningScreen.png){fig-align="left"}
+![](images/DA_OpeningScreen.png)
 
 This repository contains the complementary guide and tutorial for the deep learning bioacoustic software tool, DeepAcoustics. DeepAcoustics is an open-access, MATLAB-based tool that was modified from a program called DeepSqueak (Coffey et al., 2019). Originally designed for use with ultrasonic calls from rats for neurological studies, our modification of the program has led to an independent version of the software that is optimized to detect calls in noisier, underwater environments. Additional modifications to the classification capabilities are incorporated in DeepAcoustics.
 
