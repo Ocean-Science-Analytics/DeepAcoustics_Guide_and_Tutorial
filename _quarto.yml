@@ -1,6 +1,8 @@
 project:
   type: website
   output-dir: docs
+  resources:
+    - videos/
 
 website:
   title: "DeepAcoustics Guide and Tutorial"
@@ -15,6 +17,8 @@ website:
           href: DA.qmd
         - text: "Deep Learning Methods"
           href: background.qmd
+        - text: "Architectures, Hyperparameters & Metrics"
+          href: network_fundamentals.qmd
         - section: "Getting started"
           href: gui_overview.qmd
           contents: 
@@ -33,8 +37,8 @@ website:
               href: train.qmd
             - text: "Performance Testing"
               href: test.qmd
-            - text: "Processing & Outputs"
-              href: outputs.qmd
+            - text: "Network Deployment"
+              href: deployment.qmd
         - section: "Classification"
           href: classification.qmd  
           contents: 

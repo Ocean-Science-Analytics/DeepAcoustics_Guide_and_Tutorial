@@ -4,53 +4,55 @@ title: ""
 
 ![DeepAcoustics Screen](images/DA_OpeningScreen.png)
 
-### FULL GUIDE AND TUTORIAL COMING SOON!
-
-As of 6/25/25 we are under construction, please re-visit at end of October!
-
-------------------------------------------------------------------------
+### About DeepAcoustics
 
 DeepAcoustics is an open-access, MATLAB-based tool that was modified from a program called DeepSqueak ([Coffey et al., 2019](https://www.nature.com/articles/s41386-018-0303-6)). Originally designed for use with ultrasonic calls from rats for neurological studies, our modification of the program has led to an independent version of the software that is optimized to detect calls in noisier, underwater environments. Additional modifications to the classification capabilities are incorporated in DeepAcoustics.
 
-Modifications to DeepAcoustics allowed for a broadened scope that prioritizes **underwater acoustic environments and species**, while still accommodating **in-air terrestrial counterparts**. These enhancements extend the tool’s functionality, with key improvements including:
+Modifications to DeepAcoustics allowed for a broadened scope that prioritizes underwater acoustic environments and species, while still accommodating in-air terrestrial counterparts. These enhancements extend the tool’s functionality, with key improvements including:
 
--   **Access to wider bandwidth**, including low frequencies that were not previously required for DeepSqueak.
+- **Access to wider bandwidth**, including low frequencies that were not previously required for DeepSqueak.
 
--   **Increased user interactivity** in image creation, network training, and multiclass sound detection—ideal for analyzing overlapping call types across bandwidths.
+- **Increased user interactivity** in image creation, network training, and multiclass sound detection, ideal for analyzing overlapping call types across bandwidths.
 
--   **Support for custom duration audio file sizes** and **integration with Raven selection tables**, often used for marine call annotation.
+- **Support for custom duration audio file sizes** and **integration with Raven selection tables**, often used for marine call annotation.
 
--   **Processing of large acoustic datasets**, with the ability to extract date and time stamps directly from file names for streamlined data management.
+- **Processing of large acoustic datasets**, with the ability to extract date and time stamps directly from file names for streamlined data management.
 
--   **Ongoing advancements in classification capabilities**, ensuring the tool stays at the forefront of bioacoustic research.
+- **Ongoing advancements in classification capabilities**, ensuring the tool stays at the forefront of bioacoustic research.
 
-These modifications build on the **intuitive graphical user interface (GUI)** originally developed by Coffey et al., ensuring DeepAcoustics remains accessible to users with varying levels of bioacoustic expertise. It provides a powerful, flexible deep learning tool that simplifies network training and deployment, empowering researchers to tackle both marine and terrestrial acoustic challenges efficiently.
+These modifications build on the intuitive graphical user interface (GUI) originally developed by Coffey et al., ensuring DeepAcoustics remains accessible to users with varying levels of bioacoustic expertise. It provides a powerful, flexible deep learning tool that simplifies network training and deployment, empowering researchers to tackle both marine and terrestrial acoustic challenges efficiently.
+
+::: callout-note
+#### Applicable across species and frequency ranges
+
+DeepAcoustics can be applied to a wide variety of terrestrial and marine species and across a broad range of frequency bandwidths. This guide and tutorial emphasize marine mammals because of our specialization in underwater acoustics, but the same workflow applies to other taxa and sound sources.
+:::
 
 For access to this software, please visit the [DeepAcoustics](https://github.com/Ocean-Science-Analytics/DeepAcoustics) repository.
 
 ------------------------------------------------------------------------
 
-### Software Requirements:
+### Software Requirements
 
 DeepAcoustics is developed in MATLAB and utilizes the streamlined integration of deep learning modules along with the YOLO ("You Only Look Once") object detection model, specifically version 4. While this version is not as advanced as Python’s YOLO v9, it offers robust performance for bioacoustic applications. To run DeepAcoustics, the following are required:
 
--   MATLAB version R2023b or higher
+- MATLAB version R2023b or higher
 
--   Deep Learning Toolbox
+- Deep Learning Toolbox
 
--   Computer Vision Toolbox
+- Computer Vision Toolbox
 
--   Signal Processing Toolbox
+- Signal Processing Toolbox
 
--   Parallel Computing Toolbox (for GPU support)
+- Parallel Computing Toolbox (for GPU support)
 
--   Statistics and Machine Learning Toolbox
+- Statistics and Machine Learning Toolbox
 
 These requirements ensure optimal performance and efficient handling of deep learning tasks within the software.
 
 ------------------------------------------------------------------------
 
-### GPU Requirements:
+### GPU Requirements
 
 A GPU (Graphics Processing Unit) is a specialized hardware component designed to handle complex mathematical calculations, especially those related to graphics rendering and parallel processing tasks. While GPUs were originally developed for rendering images and videos in gaming and 3D applications, their architecture has made them highly effective for tasks that involve large-scale matrix and vector operations, which are common in deep learning.
 
@@ -76,36 +78,36 @@ Access [DeepAcoustics](https://github.com/Ocean-Science-Analytics/DeepAcoustics)
 
 If you encounter any issues or have questions about DeepAcoustics, please visit the [DeepAcoustics Software Issues](https://github.com/Ocean-Science-Analytics/DeepAcoustics/issues) section. To help us resolve problems efficiently, include the following details when reporting an issue:
 
--   **MATLAB version** you're using
+- **MATLAB version** you're using
 
--   **Platform and OS version** (e.g., Windows 11, macOS Ventura)
+- **Platform and OS version** (e.g., Windows 11, macOS Ventura)
 
--   **Steps or code** that triggered the issue
+- **Steps or code** that triggered the issue
 
--   **What happened** vs. **what you expected**
+- **What happened** vs. **what you expected**
 
--   Any **error messages or unusual behavior**
+- Any **error messages or unusual behavior**
 
--   Apply the appropriate **description in the title** (e.g., "Training Bug")
+- Apply the appropriate **description in the title** (e.g., "Training Bug")
 
 #### **Discussions**
 
 For general inquiries, ideas, or feedback that don’t fit into an issue report, use the [Discussions](https://github.com/Ocean-Science-Analytics/DeepAcoustics/discussions) section. This space is ideal for:
 
--   Sharing **ideas or suggestions** for new features
+- Sharing **ideas or suggestions** for new features
 
--   Discussing **best practices** for using the software effectively
+- Discussing **best practices** for using the software effectively
 
--   **Engaging with other users** to ask questions or share insights
+- **Engaging with other users** to ask questions or share insights
 
 Both sections are monitored to ensure you receive timely support and can connect with the broader DeepAcoustics community.
 
 ------------------------------------------------------------------------
 
-**Development:** DeepAcoustics is a joint accessible tool venture development lead by [Acoustic Interactions](https://acousticinteractions.org/vision-mission) and [Ocean Science Analytics](https://www.oceanscienceanalytics.com/).
+**Development:** DeepAcoustics is a joint accessible tool venture development lead by [Ocean Science Analytics](https://www.oceanscienceanalytics.com/) with initial direction and support from [Acoustic Interactions](https://acousticinteractions.org/vision-mission).
 
 **Software Developers**: Gabi Alongi, Peter Sugarman, Liz Ferguson, Jennifer Pettis Schallert, and original [DeepSqueak Development](https://github.com/DrCoffey/DeepSqueak) by Ruby Marx, Kevin Coffey, Robert Ciszek, & Leonardo Lara-Valderrábano
 
-© Tutorial Copyright 2024 Ocean Science Analytics
+© Tutorial Copyright 2026 Ocean Science Analytics
 
 Built with [Quarto](https://quarto.org/) using modified Lux theme
