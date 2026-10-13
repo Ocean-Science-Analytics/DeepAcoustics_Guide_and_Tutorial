@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>classification – DeepAcoustics Guide and Tutorial</title>
+<title>Classification – DeepAcoustics Guide and Tutorial</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -192,29 +192,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
       </ul>
   </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="./classification.html" class="sidebar-item-text sidebar-link active">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classification.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Classification</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./cluster.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Clustering Data</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./cluster_evaluate.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Evaluating Clusters</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tutorial.html" class="sidebar-item-text sidebar-link">
@@ -226,15 +209,24 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#key-terms" id="toc-key-terms" class="nav-link active" data-scroll-target="#key-terms">Key Terms</a></li>
+  <li><a href="#contour-clustering" id="toc-contour-clustering" class="nav-link" data-scroll-target="#contour-clustering">Contour Clustering</a></li>
+  <li><a href="#clustering-results" id="toc-clustering-results" class="nav-link" data-scroll-target="#clustering-results">Clustering Results</a></li>
+  <li><a href="#whole-image-clustering-vae-and-vgg" id="toc-whole-image-clustering-vae-and-vgg" class="nav-link" data-scroll-target="#whole-image-clustering-vae-and-vgg">Whole-Image Clustering: VAE and VGG</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">classification</h1>
+<h1 class="title">Classification</h1>
 </div>
 
 
@@ -251,8 +243,192 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>Clustering groups calls by how similar they are, without needing labels. This is useful for exploring a call repertoire: how many distinct call types there are, what they look like, and which calls are hard to place. DeepAcoustics offers two kinds of clustering:</p>
+<ul>
+<li><strong>Contour clustering:</strong> groups tonal calls, such as whistles, by the shape of their traced frequency contour. This is available now and is described on this page. A step-by-step walkthrough is coming soon.</li>
+<li><strong>Whole-image clustering with VAE and VGG:</strong> groups calls by the content of their whole spectrogram image, which suits complex calls that cannot be described by a single contour. <strong>This is new and still under development.</strong></li>
+</ul>
+<hr>
+<section id="key-terms" class="level3">
+<h3 class="anchored" data-anchor-id="key-terms">Key Terms</h3>
+<p><strong>Unsupervised clustering:</strong> grouping data without any labels. The algorithm decides which calls belong together based only on how similar they are.</p>
+<p><strong>k-means clustering:</strong> the clustering method DeepAcoustics uses. You choose (or DeepAcoustics searches for) a number of clusters, <em>k</em>. Each cluster has a center, or <strong>centroid</strong>, and each call is assigned to the cluster whose centroid it is closest to. The centroids are adjusted until the assignments stop changing.</p>
+<p><strong>Replicates:</strong> the number of times k-means is run, each time from different starting centroids. The best of the runs is kept. More replicates give more reliable clusters but take longer.</p>
+<p><strong>Contour:</strong> the line traced along the peak frequency of a call over time.</p>
+<hr>
+</section>
+<section id="contour-clustering" class="level3">
+<h3 class="anchored" data-anchor-id="contour-clustering">Contour Clustering</h3>
+<p>Contour clustering describes each call by the shape of its contour and then groups calls with similar shapes using k-means.</p>
+<section id="before-you-start" class="level4">
+<h4 class="anchored" data-anchor-id="before-you-start">Before you start</h4>
+<ul>
+<li><strong>Review your detections.</strong> Only <strong>accepted</strong> calls are clustered, and calls labeled <strong>Noise</strong> are left out, so review your detections first (see <a href="./annotate.html">Annotation Review</a>).</li>
+<li><strong>Check the contours.</strong> Contour clustering is only as good as the traced contours. Background noise, overlapping calls, and harmonics can pull the trace off the call. The contour of the selected call is shown in the <strong>Contour</strong> panel on the left of the main window, and you can remove or add points that do not fit the call with the contour editing tool before clustering.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clustering-contour-trace.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>The contour of the selected call (circled) is shown on the left of the main window.</figcaption>
+</figure>
+</div>
+</section>
+<section id="running-contour-clustering" class="level4">
+<h4 class="anchored" data-anchor-id="running-contour-clustering">Running contour clustering</h4>
+<ol type="1">
+<li><strong>Open the tool.</strong> Go to <strong>Tools &gt; Call Classification &gt; Unsupervised Clustering</strong>.</li>
+<li><strong>Choose the clustering method.</strong> Select <strong>Contour Parameters (recommended)</strong>.</li>
+<li><strong>Choose whether to use a saved model.</strong> Select <strong>No</strong> to build a new clustering model, or <strong>Yes</strong> to apply a model you saved earlier to new data.</li>
+<li><strong>Select the detections file(s).</strong> You can select more than one.</li>
+<li><strong>Set the contour parameters and choose how many clusters to use</strong> (see below).</li>
+</ol>
+</section>
+<section id="contour-parameters" class="level4">
+<h4 class="anchored" data-anchor-id="contour-parameters">Contour parameters</h4>
+<p>Each contour is resampled to a set number of evenly spaced points, and several features are measured at those points. Each feature has a <strong>weight</strong>, which sets how much it counts when calls are compared. A weight of 0 leaves that feature out.</p>
+<ul>
+<li><strong>Number of Contour Pts:</strong> the number of points each contour is resampled to (default 20). More points capture more detail; complex shapes, such as sine waves with several turns, may need more points (we have used 50) to be told apart.</li>
+<li><strong>Relative Frequency Weight:</strong> the frequency at each point relative to the start of the call, so all contours start at zero. This compares shapes regardless of the call’s absolute frequency (default weight 10).</li>
+<li><strong>Slope Weight:</strong> how quickly the frequency is rising or falling at each point (default weight 5).</li>
+<li><strong>Concavity Weight:</strong> how the slope is changing at each point, which picks out curves and turns in the contour (default weight 4).</li>
+<li><strong>Other parameters:</strong> absolute frequency, duration, number of inflection points (where the contour changes from curving up to curving down), and others. These are off (weight 0) by default.</li>
+</ul>
+</section>
+<section id="choosing-the-number-of-clusters" class="level4">
+<h4 class="anchored" data-anchor-id="choosing-the-number-of-clusters">Choosing the number of clusters</h4>
+<p>DeepAcoustics then asks how to choose the number of clusters:</p>
+<ul>
+<li><strong>Elbow Optimized:</strong> tries every number of clusters up to a maximum and plots the error (how far calls are from their cluster centers) against the number of clusters. It picks the “elbow”, where adding more clusters stops reducing the error much.</li>
+<li><strong>Elbow w/ Min Clust Size:</strong> as above, but if any cluster has fewer calls than the minimum cluster size, it reduces the number of clusters until every cluster is large enough. A minimum of 2 removes clusters made of a single call (<strong>singletons</strong>).</li>
+<li><strong>User Defined:</strong> you enter the number of clusters.</li>
+<li><strong>User Defined w/ Min Clust Size:</strong> you enter a starting number of clusters, and DeepAcoustics reduces it until every cluster meets the minimum size.</li>
+<li><strong>Silhouette Batch:</strong> runs the clustering for a range of cluster numbers and plots silhouette values (see below) for each, so you can compare them.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clustering-elbow.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Example elbow plot. The red point marks the elbow, here at 11 clusters.</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="clustering-results" class="level3">
+<h3 class="anchored" data-anchor-id="clustering-results">Clustering Results</h3>
+<p>When clustering finishes, DeepAcoustics shows several figures to help you judge the clusters.</p>
+<section id="t-sne-plot" class="level4">
+<h4 class="anchored" data-anchor-id="t-sne-plot">t-SNE plot</h4>
+<p><strong>t-SNE (t-distributed stochastic neighbor embedding):</strong> a way of drawing high-dimensional data in two dimensions. Calls that are similar are placed close together, and calls that are different are placed further apart. Each point is a call, colored and shaped by its cluster. Tight, well-separated groups suggest distinct call types; overlapping groups suggest call types that are hard to separate. The distances between groups on a t-SNE plot are only a rough guide, so use it to explore rather than to measure.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clustering-tsne.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Example t-SNE plot from contour clustering of bottlenose dolphin whistles, with 44 clusters.</figcaption>
+</figure>
+</div>
+</section>
+<section id="silhouette-plot" class="level4">
+<h4 class="anchored" data-anchor-id="silhouette-plot">Silhouette plot</h4>
+<p><strong>Silhouette value:</strong> a measure, from -1 to 1, of how well each call fits its own cluster compared with the next closest cluster.</p>
+<ul>
+<li><strong>Close to 1:</strong> the call fits its cluster well and is far from other clusters.</li>
+<li><strong>Around 0:</strong> the call is on the border between two clusters.</li>
+<li><strong>Below 0:</strong> the call may fit better in another cluster.</li>
+</ul>
+<p>The silhouette plot shows a bar for each call, grouped by cluster. The red dashed line is the overall mean silhouette value and the green dotted line is the median. The title also lists summary values, such as the proportion of calls at or below 0 and the number of singletons. Clusters with mostly long bars are well defined; clusters with short or negative bars contain calls that resist categorization.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clustering-silhouette.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Example silhouette plot for the same 44 clusters.</figcaption>
+</figure>
+</div>
+</section>
+<section id="other-figures" class="level4">
+<h4 class="anchored" data-anchor-id="other-figures">Other figures</h4>
+<ul>
+<li><strong>Centroid Contours with Max and Min Call Variation:</strong> the average contour shape of each cluster, with the range of its calls (shown when Relative Frequency is used).</li>
+<li><strong>Closest call to each cluster center:</strong> the spectrogram of the most representative call in each cluster.</li>
+</ul>
+</section>
+<section id="reviewing-and-saving-clusters" class="level4">
+<h4 class="anchored" data-anchor-id="reviewing-and-saving-clusters">Reviewing and saving clusters</h4>
+<p>The <strong>Clustering Dialog</strong> then lets you page through the calls in each cluster, look at their spectrograms, and name the clusters. You can save the clustering model, to apply it to new data later, and the extracted contours with each call’s cluster assignment.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clustering-dialog.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>The Clustering Dialog, showing the calls in one cluster.</figcaption>
+</figure>
+</div>
+</section>
+<section id="other-tools-in-the-call-classification-menu" class="level4">
+<h4 class="anchored" data-anchor-id="other-tools-in-the-call-classification-menu">Other tools in the Call Classification menu</h4>
+<ul>
+<li><strong>View Clusters:</strong> open the Clustering Dialog for detections files you have already clustered, review or rename the clusters, and update the files with the changes.</li>
+<li><strong>Create t-SNE / UMAP Embedding:</strong> create a t-SNE plot of your calls on its own, based on their contour shape, frequency, and duration (or on VAE embeddings). The UMAP option is not currently active.</li>
+<li><strong>Syntax Analysis:</strong> explore the order in which call types occur within bouts of calling.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>What we are working on: synthetic whistles
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We are developing a <strong>hybrid</strong> approach that adds a set of synthetic whistles with known shapes (upsweeps, downsweeps, constant frequency, convex and concave shapes) to the natural whistles before clustering. Because the synthetic whistles have a known answer, they help guide the clusters and check how well the clustering is working.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="whole-image-clustering-vae-and-vgg" class="level3">
+<h3 class="anchored" data-anchor-id="whole-image-clustering-vae-and-vgg">Whole-Image Clustering: VAE and VGG</h3>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Under development
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Whole-image clustering with VAE and VGG is new and still under development. This section gives an overview of what is coming. Check back later for updates and step-by-step instructions.</p>
+</div>
+</div>
+<p>Contour clustering works well for tonal calls with one clear contour, such as whistles. Many calls, such as humpback whale social calls, are pulsed, harmonic, or complex and cannot be described by a single contour. Whole-image clustering uses the entire spectrogram image of each call instead.</p>
+<section id="key-terms-1" class="level4">
+<h4 class="anchored" data-anchor-id="key-terms-1">Key terms</h4>
+<p><strong>Dimensionality reduction:</strong> summarizing a high-resolution spectrogram image, made up of thousands of pixel values, into a much smaller set of numbers that captures its key features.</p>
+<p><strong>Latent space:</strong> the compressed space in which a model represents the features of each image.</p>
+<p><strong>Embedding:</strong> the set of numbers (a vector) that represents one call in the latent space. You can think of it as the call’s “fingerprint”. Calls with similar embeddings are clustered together with k-means.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/vae-vgg-latent-space.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>How the two methods represent a call in the latent space.</figcaption>
+</figure>
+</div>
+</section>
+<section id="variational-autoencoder-vae" class="level4">
+<h4 class="anchored" data-anchor-id="variational-autoencoder-vae">Variational autoencoder (VAE)</h4>
+<p>A <strong>variational autoencoder</strong> is a generative model with two parts. The <strong>encoder</strong> compresses each spectrogram into the latent space, and the <strong>decoder</strong> tries to rebuild the spectrogram from it. Rather than a single point, the encoder describes each call as a region in the latent space (a mean and a spread), which is why it is called probabilistic. In DeepAcoustics, the VAE is trained on your call spectrograms (resized to 128 × 128 pixels) with no pre-training, and the mean of each call’s encoding is used for k-means clustering. It appears as <strong>Auto Encoder + Contour</strong> in the clustering method dialog.</p>
+</section>
+<section id="visual-geometry-group-network-vgg" class="level4">
+<h4 class="anchored" data-anchor-id="visual-geometry-group-network-vgg">Visual Geometry Group network (VGG)</h4>
+<p><strong>VGG-16</strong> is a convolutional neural network with 13 convolutional layers and 3 fully connected layers. Here it is used as a <strong>feature extractor</strong>: each spectrogram (224 × 224 pixels) is passed through the network, which produces one fixed embedding for each call that is the same every time. These embeddings are then clustered.</p>
+</section>
+<section id="what-we-are-testing" class="level4">
+<h4 class="anchored" data-anchor-id="what-we-are-testing">What we are testing</h4>
+<ul>
+<li><strong>Fitting calls to one image size:</strong> calls differ in duration and bandwidth, but these networks need every image to be the same size. We are testing different ways to do this, such as resizing the call’s spectrogram or placing it on a background of noise.</li>
+<li><strong>Comparing the methods:</strong> in our tests on humpback whale calls, VGG produced more visually cohesive clusters than the standard VAE model, which needs further optimization and higher resolution.</li>
+<li><strong>Next steps:</strong> pre-trained networks and more customization.</li>
+</ul>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

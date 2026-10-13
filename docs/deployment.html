@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>deployment – DeepAcoustics Guide and Tutorial</title>
+<title>Network Deployment – DeepAcoustics Guide and Tutorial</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -192,29 +192,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
       </ul>
   </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="./classification.html" class="sidebar-item-text sidebar-link">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classification.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Classification</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./cluster.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Clustering Data</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./cluster_evaluate.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Evaluating Clusters</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tutorial.html" class="sidebar-item-text sidebar-link">
@@ -226,19 +209,201 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#detecting-calls" id="toc-detecting-calls" class="nav-link active" data-scroll-target="#detecting-calls">Detecting Calls</a></li>
+  <li><a href="#how-call-fragments-are-merged" id="toc-how-call-fragments-are-merged" class="nav-link" data-scroll-target="#how-call-fragments-are-merged">How Call Fragments Are Merged</a></li>
+  <li><a href="#adding-the-date-and-time" id="toc-adding-the-date-and-time" class="nav-link" data-scroll-target="#adding-the-date-and-time">Adding the Date and Time</a></li>
+  <li><a href="#exporting-to-a-raven-selection-table" id="toc-exporting-to-a-raven-selection-table" class="nav-link" data-scroll-target="#exporting-to-a-raven-selection-table">Exporting to a Raven Selection Table</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./training_testing.html">Network Training &amp; Testing</a></li><li class="breadcrumb-item"><a href="./deployment.html">Network Deployment</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./training_testing.html">Network Training &amp; Testing</a></li><li class="breadcrumb-item"><a href="./deployment.html">Network Deployment</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Network Deployment</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Once you have a network that performs well on your test data (see <a href="./test.html">Performance Testing</a>), you can use it to detect calls in new audio. This page covers running the network on your audio, how DeepAcoustics turns the network’s raw output into detection boxes, adding the date and time to each detection, and exporting the detections to a Raven selection table.</p>
 <hr>
+<section id="detecting-calls" class="level3">
+<h3 class="anchored" data-anchor-id="detecting-calls">Detecting Calls</h3>
+<section id="before-you-start" class="level4">
+<h4 class="anchored" data-anchor-id="before-you-start">Before you start</h4>
+<ul>
+<li><strong>Select the audio folder.</strong> Go to <strong>File &gt; Select Audio Folder</strong> and choose the folder containing the audio you want to run the network on.</li>
+<li><strong>Select the network folder.</strong> Go to <strong>File &gt; Select Network Folder</strong> and choose the folder containing your trained network(s). If no network folder is selected, DeepAcoustics shows a <strong>No Network Selected</strong> error and you cannot run detection.</li>
+</ul>
+</section>
+<section id="running-detection" class="level4">
+<h4 class="anchored" data-anchor-id="running-detection">Running detection</h4>
+<ol type="1">
+<li><p><strong>Start detection.</strong> In the <strong>Detect, Load, &amp; Record</strong> section, select <strong>Detect Calls</strong>. If you have unsaved changes to a detections file that is already loaded, DeepAcoustics first asks whether you want to save them.</p></li>
+<li><p><strong>Select the audio files.</strong> Select all of the audio files you want to analyze. You can select as many files as you like, so you can run the network on any amount of data at once.</p></li>
+<li><p><strong>Select the network.</strong> A list shows every network in your network folder. Select the network you want to use.</p></li>
+<li><p><strong>Select the output folder.</strong> Choose the folder where the detections file will be saved.</p></li>
+<li><p><strong>Enter the settings for running the network.</strong> The <strong>Settings for Running</strong> dialog (titled with the network’s name) has three settings, described on the <a href="./test.html#settings-for-running-this-network">Performance Testing</a> page:</p>
+<ul>
+<li><strong>Total Analysis Length (Seconds; 0 = Full Duration):</strong> use 0 to analyze each audio file in full.</li>
+<li><strong>Score Threshold (0-1):</strong> the minimum confidence score a detection needs to be kept. You can use the precision-recall results from performance testing to choose a value; 0 keeps every detection.</li>
+<li><strong>Append Date to FileName (1 = yes):</strong> enter 1 to add the date and time of the run to the detections file name.</li>
+</ul>
+<p>The frequency limits are not entered here: they are taken from the network, so the audio is processed with the same settings that were used to create the network’s training images. Click <strong>OK</strong> to start.</p></li>
+</ol>
+</section>
+<section id="monitoring-progress" class="level4">
+<h4 class="anchored" data-anchor-id="monitoring-progress">Monitoring progress</h4>
+<p>While the network runs, a progress bar shows:</p>
+<ul>
+<li><strong>Detection Speed:</strong> how many times faster than real time the audio is being processed. For example, 2000x means 2000 seconds of audio are processed every second. Tiny YOLO can reach about 2000x on long audio files. Larger architectures such as CSP-DarkNet-53 and ResNet-50 run more slowly, and the bandwidth (frequency range) of the network may also affect the speed.</li>
+<li><strong>Call Fragments Found:</strong> the number of raw detections (fragments) found so far in the current file, before they are merged into calls (see <a href="#how-call-fragments-are-merged">below</a>).</li>
+<li><strong>File:</strong> which audio file is being processed, out of the total number selected.</li>
+</ul>
+<p>The MATLAB Command Window also shows progress for each audio file:</p>
+<ul>
+<li><strong>Freq cut-offs (given spec settings) set to X Hz and Y Hz:</strong> the frequency range of the spectrograms the network is run on.</li>
+<li><strong>N Calls found in: [audio file]:</strong> the number of calls in that file after merging. Files with no detections are listed as <strong>No Calls found in: [audio file]</strong>.</li>
+<li><strong>Warnings</strong> may appear if the audio has more than one channel (the channels are averaged) or if its sampling rate does not match the network (the audio is resampled or clipped to match the network’s frequency range).</li>
+</ul>
+</section>
+<section id="saving-the-detections" class="level4">
+<h4 class="anchored" data-anchor-id="saving-the-detections">Saving the detections</h4>
+<p>When all files are processed, DeepAcoustics saves the detections automatically. There is no save dialog. The detections file is saved in the output folder you selected, and its name is built from the name of the first audio file, the number of audio files, and <code>_Detections.mat</code>:</p>
+<p><code>[first audio file]_[N]AudFiles_Detections.mat</code></p>
+<p>If you entered 1 for <strong>Append Date to FileName</strong>, the date and time of the run is added before <code>_Detections.mat</code>. The file is only saved if at least one call was found.</p>
+<p>You can then load the detections file with <strong>Load Detections</strong> to review the detections (see <a href="./annotate.html">Annotation Review</a>).</p>
 <hr>
+</section>
+</section>
+<section id="how-call-fragments-are-merged" class="level3">
+<h3 class="anchored" data-anchor-id="how-call-fragments-are-merged">How Call Fragments Are Merged</h3>
+<p>The network does not see a whole audio file at once. DeepAcoustics breaks each file into short pieces, runs the network on each piece, and then merges the results into calls. This is why the progress bar counts <strong>call fragments</strong> while the Command Window reports <strong>calls</strong>.</p>
+<section id="step-1-running-the-network-on-overlapping-windows" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-running-the-network-on-overlapping-windows">Step 1: running the network on overlapping windows</h4>
+<ol type="1">
+<li><strong>Windows the length of a training image.</strong> Each audio file is split into windows the same length as the network’s training images (the image length stored in the network). Each window starts 80% of an image length after the previous one, so neighboring windows overlap by 20% of an image length. The overlap means a call that falls on the edge of one window also appears in the next.</li>
+<li><strong>One spectrogram per window.</strong> Each window is turned into a spectrogram using the network’s spectrogram settings and frequency limits, and processed in the same way as the training images.</li>
+<li><strong>Raw detections.</strong> The network detects calls in each spectrogram, keeping only the strongest of any boxes that overlap heavily within that window. Each detection has a box, a call type, and a confidence score. These raw detections are the <strong>call fragments</strong>.</li>
+</ol>
+<p>A call can produce more than one fragment. For example, a call that crosses the boundary between two windows may be detected partly in one window and partly in the next, and a long call may be boxed in pieces.</p>
+</section>
+<section id="step-2-merging-fragments-into-calls" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-merging-fragments-into-calls">Step 2: merging fragments into calls</h4>
+<p>After the whole file has been processed, DeepAcoustics merges the fragments:</p>
+<ol type="1">
+<li><strong>Sort by time.</strong> All fragments in the file are sorted by start time.</li>
+<li><strong>Compare in time only.</strong> Fragments are compared using their start and end times only; their frequencies are ignored for this step. Any overlap in time counts, however small.</li>
+<li><strong>Same call type only.</strong> Fragments are only merged if they have the same call type. Overlapping fragments of different call types stay separate.</li>
+<li><strong>Chains are merged together.</strong> If fragment 1 overlaps fragment 2, and fragment 2 overlaps fragment 3, all three are merged into one call, even if fragments 1 and 3 do not overlap each other.</li>
+<li><strong>The merged box covers every fragment.</strong> Each merged call starts at the earliest start time and ends at the latest end time of its fragments, and spans from the lowest to the highest frequency of its fragments.</li>
+<li><strong>The score is the average.</strong> The merged call’s confidence score is the mean of its fragments’ scores, and it takes the call type of its fragments.</li>
+<li><strong>Apply the score threshold.</strong> Only merged calls with a score above the <strong>Score Threshold</strong> you entered are kept. Because the threshold is applied after merging, it is the average score of the fragments that counts, not the score of any single fragment.</li>
+<li><strong>Keep boxes inside the audio.</strong> Boxes are trimmed so they do not extend past the start or end of the audio file or outside its frequency range.</li>
+</ol>
+<p>Every detection is saved as accepted, with no date or time yet.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Calls of the same type that overlap in time are merged
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Because fragments are compared in time only, two separate calls of the same type that overlap in time are merged into one detection, even if they are at different frequencies. For example, two overlapping calls of the same type from different animals would appear as a single box covering both. Calls of different types are never merged.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="adding-the-date-and-time" class="level3">
+<h3 class="anchored" data-anchor-id="adding-the-date-and-time">Adding the Date and Time</h3>
+<p>The detections file stores each call’s start time in seconds from the start of its audio file. <strong>Add Date/Time</strong> adds the actual date and time of each call, based on the date and time in the audio file names.</p>
+<ol type="1">
+<li><strong>Open the tool.</strong> Go to <strong>Tools &gt; File Management &gt; Add Date/Time</strong>.</li>
+<li><strong>Read the overwrite warning.</strong> DeepAcoustics warns that the detections files you choose will be updated and overwritten. If you are unsure, make a backup copy of the detections file first. Click <strong>Yes</strong> to continue.</li>
+<li><strong>Select the detections file(s).</strong> Select the detections file. You can select more than one if they are in the same folder.</li>
+</ol>
+<p>For each call, DeepAcoustics reads the start date and time of its audio file from the file name and adds the call’s start time within the file. The result is saved in the <strong>StTime</strong> column of the detections, in the format <code>yyyy-MM-dd HH:mm:ss.SSS</code> (to the millisecond). Calls that already have a date and time are not changed.</p>
+<section id="supported-file-name-formats" class="level4">
+<h4 class="anchored" data-anchor-id="supported-file-name-formats">Supported file name formats</h4>
+<p>DeepAcoustics looks for the date and time in the audio file names in these formats, where <code>.*</code> means any characters in between:</p>
+<ul>
+<li><strong>YYYYMMDD.*HHMMSS:</strong> a four-digit year, for example <code>20170108_133500</code>.</li>
+<li><strong>YYMMDD.*HHMMSS:</strong> a two-digit year, for example <code>HYDBBA103OOI_170108-133500</code>.</li>
+<li><strong>YYMMDD.*HHMM:</strong> a two-digit year without seconds (seconds are set to 0).</li>
+<li><strong>YYYY-MM-DD.HH-MM-SS</strong> or <strong>YYYY_MM_DD.HH_MM_SS:</strong> with dashes or underscores, for example <code>2017-01-08T13-35-00</code>.</li>
+<li><strong>SanctSound file names.</strong></li>
+</ul>
+<p>Four-digit years must start with 20, so dates must be in the year 2000 or later. DeepAcoustics also checks that the date and time are valid (for example, a month from 1 to 12 and an hour from 0 to 23).</p>
+</section>
+<section id="checking-the-date-and-time" class="level4">
+<h4 class="anchored" data-anchor-id="checking-the-date-and-time">Checking the date and time</h4>
+<p>At the moment, DeepAcoustics does not show a confirmation when the date and time have been added. If the file names could not be read, a warning appears in the MATLAB Command Window (<strong>Date/time format not recognizable - please use YYMMDD.*HHMMSS</strong>), and the calls are left without a date and time.</p>
+<p>To check that the date and time were added:</p>
+<ol type="1">
+<li>Drag the detections file into the MATLAB Command Window (or double-click it in the MATLAB Current Folder panel) to load it into the workspace.</li>
+<li>In the Workspace panel, double-click the <strong>Calls</strong> table.</li>
+<li>Scroll to the right to the <strong>StTime</strong> column and check that it contains the date and time of each call.</li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="exporting-to-a-raven-selection-table" class="level3">
+<h3 class="anchored" data-anchor-id="exporting-to-a-raven-selection-table">Exporting to a Raven Selection Table</h3>
+<p>You can export the detections to a Raven selection table (<code>.txt</code>) to view them in Raven or use them in other software.</p>
+<ol type="1">
+<li><strong>Load the detections.</strong> Export to Raven exports the detections file that is currently loaded, so first load it with <strong>Load Detections</strong> (see <a href="./import.html#loading-the-detections-file">Importing Data</a>).</li>
+<li><strong>Open the export.</strong> Go to <strong>File &gt; Import/Export &gt; Export to Raven</strong>.</li>
+<li><strong>Choose the type of selection table.</strong> DeepAcoustics asks whether to save a <strong>Sound Selection Table</strong> or a <strong>Selection Table</strong>. We recommend <strong>Selection Table</strong>. Note that <strong>Sound Selection Table</strong> is highlighted as the default in the dialog, so make sure to select <strong>Selection Table</strong>.</li>
+<li><strong>Save the table.</strong> Choose where to save the table. The default name is the detections file name followed by <code>_Raven.txt</code>.</li>
+</ol>
+<section id="selection-table-vs.-sound-selection-table" class="level4">
+<h4 class="anchored" data-anchor-id="selection-table-vs.-sound-selection-table">Selection Table vs.&nbsp;Sound Selection Table</h4>
+<ul>
+<li><strong>Selection Table:</strong> the original (legacy) Raven format. Begin and end times are counted continuously across all of the audio files in the detections file, as if they were one long recording. This matches how Raven displays a set of audio files opened together, so open all of the audio files in Raven and then open the table.</li>
+<li><strong>Sound Selection Table:</strong> begin and end times are counted from the start of each call’s own audio file, and the table lists the audio file for each call, so Raven can open the audio from the table. Raven will not load audio files that have no detections when you open a Sound Selection Table.</li>
+</ul>
+</section>
+<section id="what-is-exported" class="level4">
+<h4 class="anchored" data-anchor-id="what-is-exported">What is exported</h4>
+<p>Only <strong>accepted</strong> calls are exported. Rejected calls are left out, so the selection numbers may skip where calls were rejected. The table has these columns:</p>
+<ul>
+<li><strong>Selection:</strong> the call’s number in the detections file.</li>
+<li><strong>View and Channel:</strong> set to Spectrogram 1 and channel 1.</li>
+<li><strong>TimeStamp:</strong> the call’s date and time (<strong>StTime</strong>), if it has been added with <strong>Add Date/Time</strong>.</li>
+<li><strong>Begin Time (s) and End Time (s):</strong> the call’s start and end times, counted as described above for the type of table.</li>
+<li><strong>Low Freq (Hz) and High Freq (Hz):</strong> the call’s lowest and highest frequencies.</li>
+<li><strong>Delta Time (s) and Delta Freq (Hz):</strong> the call’s duration and bandwidth.</li>
+<li><strong>Avg Power Density (dB FS):</strong> not calculated by DeepAcoustics; filled with 1 as a placeholder.</li>
+<li><strong>Annotation:</strong> the call type.</li>
+<li><strong>Begin Path and Begin File:</strong> the full path and the file name of the call’s audio file.</li>
+<li><strong>File Offset:</strong> the call’s start time within its own audio file, in seconds.</li>
+</ul>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

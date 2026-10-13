@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>test – DeepAcoustics Guide and Tutorial</title>
+<title>Performance Testing – DeepAcoustics Guide and Tutorial</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -43,6 +43,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-a3529ce74928e40231a46fb68e134eab.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -192,29 +194,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
       </ul>
   </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="./classification.html" class="sidebar-item-text sidebar-link">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classification.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Classification</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./cluster.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Clustering Data</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./cluster_evaluate.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Evaluating Clusters</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tutorial.html" class="sidebar-item-text sidebar-link">
@@ -226,15 +211,26 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#before-you-start" id="toc-before-you-start" class="nav-link active" data-scroll-target="#before-you-start">Before You Start</a></li>
+  <li><a href="#running-performance-metrics" id="toc-running-performance-metrics" class="nav-link" data-scroll-target="#running-performance-metrics">Running Performance Metrics</a></li>
+  <li><a href="#settings-for-running-this-network" id="toc-settings-for-running-this-network" class="nav-link" data-scroll-target="#settings-for-running-this-network">Settings for Running This Network</a></li>
+  <li><a href="#true-positive-threshold" id="toc-true-positive-threshold" class="nav-link" data-scroll-target="#true-positive-threshold">True Positive Threshold</a></li>
+  <li><a href="#understanding-the-results" id="toc-understanding-the-results" class="nav-link" data-scroll-target="#understanding-the-results">Understanding the Results</a></li>
+  <li><a href="#whats-in-the-performance-metrics-file" id="toc-whats-in-the-performance-metrics-file" class="nav-link" data-scroll-target="#whats-in-the-performance-metrics-file">What’s in the Performance Metrics File</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./training_testing.html">Network Training &amp; Testing</a></li><li class="breadcrumb-item"><a href="./test.html">Performance Testing</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">test</h1>
+<h1 class="title">Performance Testing</h1>
 </div>
 
 
@@ -251,8 +247,198 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>Once you have trained a network (see <a href="./train.html">Network Training</a>), the next step is to measure how well it performs. DeepAcoustics does this by running the network on a <strong>test dataset</strong> that you have already annotated, then comparing the network’s detections against your annotations. The metrics used here (IoU, precision, recall, F1-score, average precision, and mAP) are defined in <a href="./network_fundamentals.html#performance-metrics">Performance metrics</a>.</p>
+<hr>
+<section id="before-you-start" class="level3">
+<h3 class="anchored" data-anchor-id="before-you-start">Before You Start</h3>
+<ul>
+<li><strong>Prepare a ground-truth test file.</strong> Annotate a test dataset ahead of time, in Raven or in DeepAcoustics, and convert it into a detections <code>.mat</code> file. If you annotated in Raven, import the selection table as described in <a href="./import.html">Importing Data</a>. The test data should not be part of the data used to train the network, so the results show how the network performs on calls it has never seen.</li>
+<li><strong>Name your files clearly.</strong> Ground-truth files, network detections, and networks are all <code>.mat</code> files, and detections files all end in <code>_Detections.mat</code>. Give your ground-truth file a name that makes it obvious it contains your verified annotations (for example, <code>HYDDBA105OOI_20170203_Test_Detections.mat</code>).</li>
+<li><strong>Select the network folder.</strong> Go to <strong>File &gt; Select Network Folder</strong> and choose the folder where you saved the network you want to evaluate.</li>
+</ul>
+<hr>
+</section>
+<section id="running-performance-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="running-performance-metrics">Running Performance Metrics</h3>
+<ol type="1">
+<li><p><strong>Open the tool.</strong> Go to <strong>Tools &gt; Performance Metrics</strong>.</p></li>
+<li><p><strong>Select the ground-truth file.</strong> Choose your ground-truth detections file, the one containing your verified annotations. You can select more than one file if your test data are split across several.</p></li>
+<li><p><strong>Choose the call types.</strong> Select the call types to load from the ground-truth file. You can choose a single call type to evaluate on its own, or click <strong>Select all</strong> to evaluate all of them. In this example, all call types are selected.</p></li>
+<li><p><strong>Select the network.</strong> Choose the network <code>.mat</code> file you want to evaluate. This can be any network you have trained, which is why a clear network name matters.</p></li>
+<li><p><strong>Enter the settings for running the network.</strong> The <strong>Settings for Running This Network</strong> dialog has three settings, all of which can usually be left at 0 (see <a href="#settings-for-running-this-network">below</a>). Click <strong>OK</strong>.</p></li>
+<li><p><strong>Let the network run.</strong> DeepAcoustics runs the network on every audio file in the ground-truth file. A <strong>Detecting Calls</strong> progress bar appears, along with a progress window for each audio file as it is processed.</p></li>
+<li><p><strong>Set the true positive threshold.</strong> The <strong>True Positive Threshold</strong> dialog asks for the IoU threshold that a detection must reach to count as correct (see <a href="#true-positive-threshold">below</a>). Click <strong>OK</strong>.</p></li>
+<li><p><strong>Review the results.</strong> For each call type, DeepAcoustics displays a precision-recall curve and a <strong>P/R Result</strong> summary, plus a confusion matrix for all call types (see <a href="#understanding-the-results">Understanding the results</a>).</p></li>
+<li><p><strong>Save the performance metrics file.</strong> DeepAcoustics asks where to save the performance metrics (the default name is <code>PerformanceMetrics.mat</code>). We recommend saving it in a dedicated folder and renaming it to include both the test file and the network, for example <code>HYDDBA105OOI_20170203_Test_TinyYOLO_v1_PerformanceMetrics.mat</code>.</p></li>
+<li><p><strong>Save the network’s detections.</strong> DeepAcoustics then asks where to save the detections the network made on the test data. This is a regular detections file that you can load with <strong>Load Detections</strong> to visually inspect how well the network did, call by call. The default name is built from the name of the last audio file processed and the number of audio files (for example, <code>HYDDBA105OOI_20170203-060000_49AudFiles_Detections.mat</code>), so consider renaming it to include the network name.</p></li>
+</ol>
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="videos/performance-metrics.mp4"></video></div>
+<hr>
+</section>
+<section id="settings-for-running-this-network" class="level3">
+<h3 class="anchored" data-anchor-id="settings-for-running-this-network">Settings for Running This Network</h3>
+<p>This dialog is partly a legacy feature. The frequency limits are taken automatically from the network, so only three settings remain, and all three can normally stay at their defaults of 0:</p>
+<ul>
+<li><p><strong>Total Analysis Length (Seconds; 0 = Full Duration):</strong> how much of the test audio to analyze, in seconds. Use 0 to analyze all of it. A shorter length, such as 60 seconds, can be useful for a quick trial run on a long test file.</p></li>
+<li><p><strong>Score Threshold (0-1):</strong> the minimum confidence score a detection needs to be kept. The default of 0 keeps every detection, regardless of its confidence score, so the full precision-recall curve can be calculated. Set it higher (for example, 0.5) only if you want to keep just the more confident detections.</p></li>
+<li><p><strong>Append Date to FileName (1 = yes):</strong> enter 1 to add the date and time of the run to the name of the saved detections file. The default is 0 (no date).</p>
+<p><img src="images/running-network-settings.jpg" class="img-fluid" width="348"></p></li>
+</ul>
+</section>
+<section id="true-positive-threshold" class="level3">
+<h3 class="anchored" data-anchor-id="true-positive-threshold">True Positive Threshold</h3>
+<p>The <strong>Threshold for overlap (0-1) that counts as a true positive</strong> is the IoU threshold: how much a detection’s bounding box must overlap the matching ground-truth box to count as a true positive (see <a href="./network_fundamentals.html#intersection-over-union-iou">Intersection over Union (IoU)</a>). The default is 0.5, a common value in image object detection. The right threshold is up to you and depends on what you need the network’s detections for. For example:</p>
+<ul>
+<li><strong>0.1, detecting the call at all:</strong> a detection counts as correct if its box overlaps the call even a little. Use this when you mainly want to know whether the network finds calls, not how well it boxes them.</li>
+<li><strong>0.5, detecting the call moderately well:</strong> a detection counts as correct only if its box covers a good part of the call.</li>
+<li><strong>0.9, boxing almost all of the call:</strong> a detection counts as correct only if its box closely matches the annotated box. Use this when tight boxes matter, for example if you plan to take measurements from the detections.</li>
+</ul>
+<p>The example results below use 0.1.</p>
+<p><img src="images/iou-threshold-selection-for-matching.jpg" class="img-fluid" width="247"></p>
+<p>This threshold is used for the true positives, false positives, false negatives, precision, recall, F1-score, average precision, and confusion matrix. The mAP is always calculated across IoU thresholds from 0.1 to 0.9, regardless of this setting.</p>
+<hr>
+</section>
+<section id="understanding-the-results" class="level3">
+<h3 class="anchored" data-anchor-id="understanding-the-results">Understanding the Results</h3>
+<section id="precision-recall-curve-and-pr-result" class="level4">
+<h4 class="anchored" data-anchor-id="precision-recall-curve-and-pr-result">Precision-recall curve and P/R Result</h4>
+<p>DeepAcoustics produces a precision-recall curve and a <strong>P/R Result</strong> summary for <strong>every call type the network was trained on</strong> (except Noise), even if that call type does not occur in the test file. Call types that are not in the test file will have empty curves and missing values.</p>
+<p><strong>Precision-recall curve:</strong> each point is one confidence (score) threshold. Moving from left to right, the threshold is lowered, so more detections are included: recall rises and precision usually falls. The color of each point shows its score threshold (yellow = high, dark blue = low). The title shows the call type and its average precision (rounded to one decimal place). See <a href="./network_fundamentals.html#average-precision-ap-and-mean-average-precision-map">Average precision (AP) and mean average precision (mAP)</a> for how to interpret the curve.</p>
+<p><strong>P/R Result:</strong> these values are calculated at a score threshold of 0, meaning every detection the network made is included:</p>
+<ul>
+<li><p><strong># True Positives:</strong> detections that match a ground-truth call of the same call type, with an IoU at or above the true positive threshold.</p></li>
+<li><p><strong># False Positives:</strong> detections of this call type that do not match a ground-truth call of the same type. This includes detections on noise and detections that matched a call but gave it the wrong call type.</p></li>
+<li><p><strong># of False Negatives:</strong> ground-truth calls of this call type that the network missed (or detected with the wrong call type).</p></li>
+<li><p><strong>Precision:</strong> true positives ÷ all detections of this call type.</p></li>
+<li><p><strong>Recall:</strong> true positives ÷ all ground-truth calls of this call type.</p></li>
+<li><p><strong>F-Score:</strong> the F1-score, the balance between precision and recall: 2 × (precision × recall) ÷ (precision + recall).</p></li>
+<li><p><strong>Average Prec:</strong> the average precision at the true positive (IoU) threshold you entered, shown in parentheses.</p></li>
+<li><p><strong>mAP:</strong> the mean average precision across IoU thresholds from 0.1 to 0.9, in steps of 0.1.</p>
+<p><img src="images/precision-recall-curve-by-calltype.jpg" class="img-fluid"></p></li>
+</ul>
+<p>For example, for the fin whale 20 Hz calls, with an IoU threshold of 0.1: 269 true positives, 80 false positives, and 19 false negatives give a precision of 269 ÷ 349 = 0.7708, a recall of 269 ÷ 288 = 0.9340, and an F-score of 0.8446. The average precision is 0.9050, and the mAP is 0.3614. The much lower mAP shows that many detections find the call but do not box it tightly enough to pass the stricter IoU thresholds.</p>
+</section>
+<section id="confusion-matrix" class="level4">
+<h4 class="anchored" data-anchor-id="confusion-matrix">Confusion matrix</h4>
+<p>DeepAcoustics also displays a confusion matrix showing how the network’s call types compare with the ground truth, at the true positive threshold you entered. It is most useful for multiclass networks, where it shows which call types are being confused with each other:</p>
+<ul>
+<li><p><strong>Rows</strong> are the true call types (from the ground-truth file), and <strong>columns</strong> are the call types the network predicted.</p></li>
+<li><p><strong>The diagonal</strong> shows correct detections (true positives).</p></li>
+<li><p><strong>Off-diagonal cells</strong> show calls detected with the wrong call type. For example, in the test run, 3 fin whale 20 Hz calls were detected as 18 Hz.</p></li>
+<li><p><strong>The “unmatched” column</strong> shows ground-truth calls the network missed (false negatives).</p></li>
+<li><p><strong>The “unmatched” row</strong> shows detections that did not match any ground-truth call (false positives on noise).</p></li>
+<li><p><strong>The row and column summaries</strong> at the edges show each row and column as percentages, so you can see at a glance which call types are most often missed or confused.</p>
+<p><img src="images/confusion-matrix.jpg" class="img-fluid"></p></li>
+</ul>
+<p>Detections the network labeled as Noise are not counted as calls and are added to the unmatched category.</p>
+<hr>
+</section>
+</section>
+<section id="whats-in-the-performance-metrics-file" class="level3">
+<h3 class="anchored" data-anchor-id="whats-in-the-performance-metrics-file">What’s in the Performance Metrics File</h3>
+<p>The performance metrics <code>.mat</code> file stores everything needed to review or report the results later. You can load it into MATLAB to look at the values directly.</p>
+<p><strong>Run information</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>NetName</code>, <code>NetPath</code></td>
+<td>The file name and folder of the network that was evaluated.</td>
+</tr>
+<tr class="even">
+<td><code>PathToDet</code></td>
+<td>The full path to the ground-truth detections file used for testing.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Results for each call type</strong></p>
+<p>These variables have one value per call type, in the same order as the call types stored in the network (<code>detector.ClassNames</code> in the network file). This list includes Noise and any call types that are not in the test file, which have missing (NaN) values.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>numTrueDets</code></td>
+<td>The number of ground-truth calls of each call type in the test file.</td>
+</tr>
+<tr class="even">
+<td><code>numDets</code></td>
+<td>The number of detections the network made for each call type.</td>
+</tr>
+<tr class="odd">
+<td><code>numTP</code>, <code>numFP</code>, <code>numFN</code></td>
+<td>The numbers of true positives, false positives, and false negatives, at a score threshold of 0.</td>
+</tr>
+<tr class="even">
+<td><code>prec</code>, <code>recall</code>, <code>fscore</code></td>
+<td>Precision, recall, and F1-score, at a score threshold of 0.</td>
+</tr>
+<tr class="odd">
+<td><code>avgprec</code></td>
+<td>Average precision at the true positive (IoU) threshold you entered.</td>
+</tr>
+<tr class="even">
+<td><code>mAP</code></td>
+<td>Mean average precision across IoU thresholds from 0.1 to 0.9.</td>
+</tr>
+<tr class="odd">
+<td><code>precvec</code>, <code>recallvec</code></td>
+<td>The precision and recall values that make up each precision-recall curve, one pair of values per score threshold. These can be used to re-plot the curves.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Detailed results</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>results</code></td>
+<td>A table of every detection the network made, with its bounding box (<code>Box</code>), confidence score (<code>Scores</code>), and call type (<code>Label</code>).</td>
+</tr>
+<tr class="even">
+<td><code>confMat</code>, <code>confusionClassNames</code></td>
+<td>The confusion matrix counts and the call type names for its rows and columns (including “unmatched”).</td>
+</tr>
+<tr class="odd">
+<td><code>odMetrics</code></td>
+<td>MATLAB’s full object detection metrics at the true positive threshold you entered.</td>
+</tr>
+<tr class="even">
+<td><code>odMetricsmAP</code></td>
+<td>MATLAB’s full object detection metrics across IoU thresholds from 0.1 to 0.9, used to calculate the mAP.</td>
+</tr>
+</tbody>
+</table>
+<p>For example, in the test run, <code>numTrueDets</code> shows 148 fin whale 18 Hz calls, 288 fin whale 20 Hz calls, 36 blue whale A calls, and 64 blue whale B calls in the ground-truth file, and the confusion matrix accounts for every one of them as either a correct detection, a call detected with the wrong call type, or a missed call.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -656,6 +842,7 @@ ul.task-list li input[type="checkbox"] {
   });
   </script>
 </div> <!-- /content -->
+<script>videojs(video_shortcode_videojs_video1);</script>
 
 
 

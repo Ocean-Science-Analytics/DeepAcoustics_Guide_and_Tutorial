@@ -39,13 +39,8 @@ website:
               href: test.qmd
             - text: "Network Deployment"
               href: deployment.qmd
-        - section: "Classification"
-          href: classification.qmd  
-          contents: 
-            - text: "Clustering Data"
-              href: cluster.qmd
-            - text: "Evaluating Clusters"
-              href: cluster_evaluate.qmd
+        - text: "Classification"
+          href: classification.qmd
         - text: "Tutorial"
           href: tutorial.qmd  
           

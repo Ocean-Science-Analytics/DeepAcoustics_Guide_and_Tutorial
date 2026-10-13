@@ -192,29 +192,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
       </ul>
   </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="./classification.html" class="sidebar-item-text sidebar-link">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classification.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Classification</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./cluster.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Clustering Data</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./cluster_evaluate.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Evaluating Clusters</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tutorial.html" class="sidebar-item-text sidebar-link">
@@ -295,7 +278,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="training-settings" class="level3">
 <h3 class="anchored" data-anchor-id="training-settings">Training Settings</h3>
-<p>A series of dialogs then asks for the training settings.</p>
+<p>A series of dialogs then asks for the training settings. The first prompts you with the architecture you would like to select.</p>
 <section id="base-network" class="level4">
 <h4 class="anchored" data-anchor-id="base-network">Base network</h4>
 <p>Choose the base network (architecture) to train from:</p>
@@ -329,16 +312,17 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <p>When you select <strong>No</strong>, here is what DeepAcoustics calculates:</p>
 <ol type="1">
-<li>For each number of anchors from 1 to 15, it groups the widths and heights of all the bounding boxes in your training images into that many clusters (using MATLAB’s <code>estimateAnchorBoxes</code>, a clustering method that groups boxes by how much they overlap). The center of each cluster becomes one anchor box shape.</li>
-<li>For each count, it calculates the <strong>mean IoU</strong>: how well, on average, each of your annotated boxes overlaps with its closest-matching anchor shape. A mean IoU of 1 would mean every box matched an anchor exactly.</li>
-<li>It plots <strong>Number of Anchors</strong> (x-axis) against <strong>Mean IoU</strong> (y-axis).</li>
+<li><p>For each number of anchors from 1 to 15, it groups the widths and heights of all the bounding boxes in your training images into that many clusters (using MATLAB’s <code>estimateAnchorBoxes</code>, a clustering method that groups boxes by how much they overlap). The center of each cluster becomes one anchor box shape.</p></li>
+<li><p>For each count, it calculates the <strong>mean IoU</strong>: how well, on average, each of your annotated boxes overlaps with its closest-matching anchor shape. A mean IoU of 1 would mean every box matched an anchor exactly.</p></li>
+<li><p>It plots <strong>Number of Anchors</strong> (x-axis) against <strong>Mean IoU</strong> (y-axis).</p>
+<p><img src="images/number-of-anchor-boxes.jpg" class="img-fluid" width="569"></p></li>
 </ol>
 <p>Choose the number where the curve starts to level off (the “elbow”). Beyond that point, adding more anchors improves the fit only slightly while increasing computation. In this example, the curve rises steeply up to about 6 anchors and then flattens, and 6 anchors has also worked well for us in the past, so we enter <strong>6</strong>. We also recommend trying a few values and comparing the resulting networks.</p>
 <p>If the number you enter does not suit the architecture, DeepAcoustics rounds it up: Tiny YOLO and ResNet-50 need an even number, and CSP-DarkNet-53 needs a multiple of three. See <a href="./network_fundamentals.html#anchor-boxes">Anchor boxes</a> for how anchor boxes work and how to choose the number.</p>
 </section>
 <section id="solver-optimizer" class="level4">
 <h4 class="anchored" data-anchor-id="solver-optimizer">Solver (optimizer)</h4>
-<p>The solver, or optimizer, is the algorithm that adjusts the network’s weights during training to reduce the loss (the error between the network’s predictions and your annotations). DeepAcoustics offers three:</p>
+<p>The solver, or optimizer, is the algorithm that adjusts the network’s weights during training to reduce the loss (the error between the network’s predictions and your annotations). DeepAcoustics currently offers three:</p>
 <ul>
 <li><strong>sgdm (stochastic gradient descent with momentum):</strong> after each mini-batch, takes a step in the direction that reduces the loss, using the same step size (learning rate) for every weight. “Momentum” carries over part of the previous steps, which smooths out the path and helps it keep moving in a consistent direction. It is simple and reliable but can need more epochs to converge.</li>
 <li><strong>rmsprop (root mean square propagation):</strong> adjusts the step size separately for each weight, based on how large that weight’s recent updates have been. Weights with large or erratic updates take smaller steps, and weights with small, steady updates take larger ones. This often makes training more stable. RMSProp has worked well for us, and we typically use it with its default learning rate.</li>
@@ -356,18 +340,19 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Larger mini-batches</strong> give a more stable estimate of which direction to adjust the weights and need fewer updates per epoch, but they use more GPU memory.</li>
 <li><strong>Smaller mini-batches</strong> use less memory and make more frequent, noisier updates.</li>
 </ul>
-<p>The default is <strong>16</strong>, because larger architectures such as CSP-DarkNet-53 can run out of memory with bigger mini-batches. Smaller networks such as Tiny YOLO can usually handle larger mini-batches, such as <strong>64</strong>.</p>
+<p>The default is <strong>16</strong>, because larger architectures such as CSP-DarkNet-53 can run out of memory with bigger mini-batches. Smaller networks such as Tiny YOLO can usually handle larger mini-batches, such as <strong>64</strong> and above.</p>
 </section>
 <section id="maximum-number-of-epochs" class="level4">
 <h4 class="anchored" data-anchor-id="maximum-number-of-epochs">Maximum number of epochs</h4>
-<p>An epoch is one complete pass through all of the training images (see <a href="./network_fundamentals.html#key-hyperparameters">Key hyperparameters</a>). The default maximum is <strong>30</strong>. More epochs give the network more chances to learn, but training too long can lead to overfitting, where the network memorizes the training images instead of learning patterns that generalize to new data. Watch the training progress window (below) and stop early if the validation loss starts to rise. In this example, we enter <strong>10</strong>.</p>
+<p>An epoch is one complete pass through all of the training images (see <a href="./network_fundamentals.html#key-hyperparameters">Key hyperparameters</a>). The default maximum is <strong>30</strong>. More epochs give the network more chances to learn, but training too long can lead to overfitting, where the network memorizes the training images instead of learning patterns that generalize to new data. Watch the training progress window (below) and stop early if the validation loss starts to rise.</p>
 </section>
 <section id="validation-data" class="level4">
 <h4 class="anchored" data-anchor-id="validation-data">Validation data</h4>
 <p>If you did not provide validation image tables, DeepAcoustics asks <strong>Would you like to use a proportion of your training data to validate (recommended to assess overfitting)?</strong></p>
 <ul>
-<li><strong>Yes:</strong> set aside part of your training images for validation. These images are not used to train the network; instead, the network is checked against them during training to show how well it handles data it has not learned from. This is what lets you spot overfitting.</li>
-<li><strong>No:</strong> train on all of the images without validation.</li>
+<li><p><strong>Yes:</strong> set aside part of your training images for validation. These images are not used to train the network; instead, the network is checked against them during training to show how well it handles data it has not learned from. This is what lets you spot overfitting.</p></li>
+<li><p><strong>No:</strong> train on all of the images without validation (not recommended).</p>
+<p><img src="images/validation-data-prompt.jpg" class="img-fluid" width="473"></p></li>
 </ul>
 <p>The dialog also warns that, because of MATLAB data type limitations, using validation data may stop the training images from being reshuffled between epochs, which could itself contribute to overfitting.</p>
 <p>If you choose <strong>Yes</strong>, enter the <strong>proportion</strong> of your non-augmented training images to use for validation, as a decimal (the default is 0.1, or 10%). Augmented duplicates are never selected for validation. Studies have used validation proportions from about 10% up to 25%; we have found that about <strong>0.2 (20%)</strong> works well, and that is what this example uses.</p>
@@ -380,6 +365,11 @@ ul.task-list li input[type="checkbox"] {
 <li>Starting with the rarest call type, it randomly selects images containing each call type until that call type has its share. Because one image can contain several call types, images selected for one call type also count toward the others.</li>
 </ol>
 <p>DeepAcoustics then shows a <strong>Check Proportions</strong> dialog with the percentage of each call type’s images that ended up in the validation set. The rarest call type will be close to the proportion you entered, and more common call types will be lower, because they all receive about the same number of validation images. In this example, with a proportion of 0.2, call type A (the rarest) is at 19.8%, and the more common call types are between 4.8% and 7.9%. Click <strong>Yes</strong> to proceed (clicking <strong>No</strong> cancels training).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/validation-percentage-by-calls.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
 <hr>
 </section>
 </section>
@@ -393,6 +383,11 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Progress panel (right):</strong> shows the progress bar, start time, elapsed time, current epoch, iteration, and learning rate. The <strong>Export as Image</strong> button saves a picture of the plot.</li>
 </ul>
 <p>How to read the curves is explained in <a href="./network_fundamentals.html#key-hyperparameters">Key hyperparameters</a>. In short: if both losses fall together, the network is still learning; if both are low and stable, the fit is good; and if the validation loss starts to rise while the training loss keeps falling, the network is overfitting.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/training-progress-window.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
 <section id="the-matlab-command-window" class="level4">
 <h4 class="anchored" data-anchor-id="the-matlab-command-window">The MATLAB Command Window</h4>
 <p>While training runs, MATLAB also prints a progress table in the Command Window. It starts by listing the call types (object classes) the network is being trained on, then adds a row every 30 iterations, plus a row each time the validation loss is calculated:</p>

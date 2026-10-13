@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>training_testing – DeepAcoustics Guide and Tutorial</title>
+<title>Network Training &amp; Testing – DeepAcoustics Guide and Tutorial</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -192,29 +192,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
       </ul>
   </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="./classification.html" class="sidebar-item-text sidebar-link">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classification.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Classification</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./cluster.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Clustering Data</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./cluster_evaluate.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Evaluating Clusters</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tutorial.html" class="sidebar-item-text sidebar-link">
@@ -226,15 +209,22 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-workflow" id="toc-the-workflow" class="nav-link active" data-scroll-target="#the-workflow">The Workflow</a></li>
+  <li><a href="#before-you-start" id="toc-before-you-start" class="nav-link" data-scroll-target="#before-you-start">Before You Start</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">training_testing</h1>
+<h1 class="title">Network Training &amp; Testing</h1>
 </div>
 
 
@@ -251,8 +241,42 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>Once your data are annotated and reviewed, you can train a deep learning network to find those calls for you. This section walks through the full process, from turning your annotations into training images to running a finished network on new audio. The architectures, settings, and performance metrics referred to throughout are explained in <a href="./network_fundamentals.html">Architectures, Hyperparameters &amp; Metrics</a>.</p>
+<hr>
+<section id="the-workflow" class="level3">
+<h3 class="anchored" data-anchor-id="the-workflow">The Workflow</h3>
+<ol type="1">
+<li><p><strong><a href="./image_creation.html">Creating Training Images</a>:</strong> convert your annotated audio into spectrogram images, each paired with the bounding boxes of the calls it contains. The spectrogram and image settings you choose here have a large effect on how well the network performs.</p></li>
+<li><p><strong><a href="./train.html">Network Training</a>:</strong> train a detection network on those images. You choose the base network (Tiny YOLO, CSP-DarkNet-53, or ResNet-50, which are pre-trained, or a blank ResNet-50 that is still being evaluated), the anchor boxes, and the training settings, and watch the training and validation loss as the network learns.</p></li>
+<li><p><strong><a href="./test.html">Performance Testing</a>:</strong> run the trained network on a separate, annotated test dataset and compare its detections with your annotations, using precision, recall, F1-score, average precision, mAP, and a confusion matrix.</p></li>
+<li><p><strong><a href="./deployment.html">Network Deployment</a>:</strong> use the network to detect calls in new audio, add the date and time to each detection, and export the detections to a Raven selection table.</p></li>
+</ol>
+<hr>
+</section>
+<section id="before-you-start" class="level3">
+<h3 class="anchored" data-anchor-id="before-you-start">Before You Start</h3>
+<ul>
+<li><strong>Annotate thoroughly.</strong> DeepAcoustics adds noise examples automatically from the parts of your audio outside the annotation boxes, so every call of interest in an annotated file needs to be boxed. See <a href="./prep.html">Preparing Your Data</a> and <a href="./annotate.html">Annotation Review</a>.</li>
+<li><strong>Keep test data separate.</strong> Set aside annotated audio that is not used for training, so performance testing shows how the network handles calls it has never seen.</li>
+<li><strong>Organize your folders.</strong> Decide where your training images, image tables, networks, and results will be saved before you start. The image table stores the location of every training image, so the images should not be moved afterward.</li>
+<li><strong>Keep track of your settings.</strong> You will likely train several networks with different settings before finding the one that works best. Recording the settings and test results for each network makes them easy to compare. The <a href="./tutorial.html#tracking-your-networks">tutorial data</a> includes a spreadsheet template for this.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Training is an iterative process
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There is rarely a single right set of settings. Start with a fast architecture such as Tiny YOLO, test the network, change one setting at a time, and compare the results. The <a href="./tutorial.html">Tutorial</a> takes you through each of these steps with example data.</p>
+</div>
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

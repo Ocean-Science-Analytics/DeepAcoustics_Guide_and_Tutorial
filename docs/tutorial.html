@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>tutorial – DeepAcoustics Guide and Tutorial</title>
+<title>Tutorial – DeepAcoustics Guide and Tutorial</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -192,29 +192,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
       </ul>
   </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="./classification.html" class="sidebar-item-text sidebar-link">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classification.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Classification</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./cluster.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Clustering Data</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./cluster_evaluate.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Evaluating Clusters</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tutorial.html" class="sidebar-item-text sidebar-link active">
@@ -226,15 +209,25 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-tutorial-data" id="toc-the-tutorial-data" class="nav-link active" data-scroll-target="#the-tutorial-data">The Tutorial Data</a></li>
+  <li><a href="#exercise-1-viewing-annotated-data" id="toc-exercise-1-viewing-annotated-data" class="nav-link" data-scroll-target="#exercise-1-viewing-annotated-data">Exercise 1: Viewing Annotated Data</a></li>
+  <li><a href="#exercise-2-training-a-network" id="toc-exercise-2-training-a-network" class="nav-link" data-scroll-target="#exercise-2-training-a-network">Exercise 2: Training a Network</a></li>
+  <li><a href="#exercise-3-testing-network-performance" id="toc-exercise-3-testing-network-performance" class="nav-link" data-scroll-target="#exercise-3-testing-network-performance">Exercise 3: Testing Network Performance</a></li>
+  <li><a href="#exercise-4-deploying-a-network-on-new-audio" id="toc-exercise-4-deploying-a-network-on-new-audio" class="nav-link" data-scroll-target="#exercise-4-deploying-a-network-on-new-audio">Exercise 4: Deploying a Network on New Audio</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">tutorial</h1>
+<h1 class="title">Tutorial</h1>
 </div>
 
 
@@ -251,8 +244,391 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>This tutorial takes you through the main DeepAcoustics workflow using real data: viewing annotated calls, training a detection network, testing how well a network performs, and running a network on new audio. Each exercise builds on the pages in this guide, which are linked throughout for more detail.</p>
+<hr>
+<section id="the-tutorial-data" class="level3">
+<h3 class="anchored" data-anchor-id="the-tutorial-data">The Tutorial Data</h3>
+<p>The tutorial uses a multiclass baleen whale dataset of blue whale A and B calls and fin whale 18 Hz and 20 Hz pulses. The training and test data were recorded on Ocean Observatories Initiative (OOI) hydrophones off Newport, Oregon, and the deployment data come from the SanctSound monitoring site MB01 in Monterey Bay National Marine Sanctuary. All audio has a sampling rate of 400 Hz (a bandwidth of 0 to 200 Hz).</p>
+<p>The tutorial data are a small subset of a larger Dryad repository, which contains the full annotated training and evaluation datasets and the networks from a recent multiclass baleen whale effort:</p>
+<ul>
+<li><strong>Annotated training and evaluation data and DeepAcoustics-derived networks for multi-class baleen whale calls</strong> (doi: <a href="https://doi.org/10.5061/dryad.x0k6djj2d" class="uri">https://doi.org/10.5061/dryad.x0k6djj2d</a>)</li>
+</ul>
+<section id="downloading-the-data" class="level4">
+<h4 class="anchored" data-anchor-id="downloading-the-data">Downloading the data</h4>
+<p>Download the <strong>tutorial_data</strong> folder from the <a href="https://github.com/Ocean-Science-Analytics/DeepAcoustics_Guide_and_Tutorial/tree/master/tutorial_data">DeepAcoustics Guide and Tutorial GitHub repository</a>. Save it somewhere easy to find, such as your Documents folder, and keep the folder structure as it is.</p>
+</section>
+<section id="whats-in-the-folder" class="level4">
+<h4 class="anchored" data-anchor-id="whats-in-the-folder">What’s in the folder</h4>
+<ul>
+<li><strong>Network_Settings_Template.xlsx:</strong> a spreadsheet template for keeping track of the settings and results of each network you train (see <a href="#tracking-your-networks">Tracking your networks</a>).</li>
+<li><strong>OOI_Multiclass:</strong> the data for the exercises.
+<ul>
+<li><strong>01_Training</strong>
+<ul>
+<li><strong>01_Training_Audio:</strong> five folders of training audio (5-minute <code>.wav</code> files), each with its Raven selection table, and the five matching annotations files (<code>_Annotations.mat</code>) already imported into DeepAcoustics.</li>
+<li><strong>02_Images:</strong> an empty folder for saving your training images.</li>
+</ul></li>
+<li><strong>02_Networks</strong>
+<ul>
+<li><strong>tiny_YOLO:</strong> a trained Tiny YOLO network (<code>TinyYOLO.mat</code>) to test, and a <strong>Detections_and_Performance</strong> folder for saving the test results.</li>
+</ul></li>
+<li><strong>03_Testing</strong>
+<ul>
+<li><strong>01_OOI_2017_Feb_03:</strong> 49 test audio files from 3 February 2017 and their Raven selection table.</li>
+<li><strong>HYDDBA105OOI_20170203_Test_Detections.mat:</strong> the test annotations, already imported into DeepAcoustics. This is the ground-truth file for testing a network.</li>
+</ul></li>
+<li><strong>04_Annotation_Summary.pdf:</strong> the metadata document from the Dryad submission, describing how the calls in the training and test files were annotated. It explains the decisions that went into the annotation process, including the criteria for each call type, with example spectrograms. Read it to help interpret the annotations, for example why some faint calls were boxed and others were not.</li>
+<li><strong>05_Deployment_Call_Review</strong>
+<ul>
+<li><strong>Network:</strong> a trained multiclass network (<code>Pacific_LF_tinyYOLO_2026_v1.mat</code>) for detecting calls in new audio.</li>
+<li><strong>SanctSound_MB01:</strong> 24 audio files from SanctSound site MB01, each about 6 hours long.</li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Keep a backup of the tutorial data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Some steps write changes into the detections files (for example, adding noise when creating training images, or adding the date and time). Keep an unchanged copy of the <strong>tutorial_data</strong> folder, or download it again, if you want to start an exercise over.</p>
+</div>
+</div>
+</section>
+<section id="tracking-your-networks" class="level4">
+<h4 class="anchored" data-anchor-id="tracking-your-networks">Tracking your networks</h4>
+<p>As you train and test networks, it quickly becomes hard to remember which settings produced which results. <strong>Network_Settings_Template.xlsx</strong> has one row per network version and columns for:</p>
+<ul>
+<li><strong>Training details:</strong> the network, call types (classes), image size, image duration, anchor boxes, solver, learning rate, mini-batch size, epochs, validation split, time to train, and the number of training images and noise samples.</li>
+<li><strong>Test results:</strong> for each test file, the true positives, false positives, false negatives, precision, recall, F-score, average precision, and mAP.</li>
+</ul>
+<p>Fill in a row each time you train or test a network in the exercises below.</p>
+<hr>
+</section>
+</section>
+<section id="exercise-1-viewing-annotated-data" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-1-viewing-annotated-data">Exercise 1: Viewing Annotated Data</h3>
+<p>In this exercise, you open the test annotations, adjust the display so the calls are easy to see, and move through the calls. See <a href="./import.html">Importing Data</a> and <a href="./annotate.html">Annotation Review</a> for more detail.</p>
+<ol type="1">
+<li><p><strong>Set the audio folder.</strong> Go to <strong>File &gt; Select Audio Folder</strong> and select <strong>OOI_Multiclass &gt; 03_Testing &gt; 01_OOI_2017_Feb_03</strong>.</p></li>
+<li><p><strong>Load the test annotations.</strong> Go to <strong>File &gt; Load Detections</strong> and select <strong>03_Testing &gt; HYDDBA105OOI_20170203_Test_Detections.mat</strong>.</p>
+<ul>
+<li>The file contains four call types: <strong>18 Hz</strong>, <strong>20 Hz</strong>, <strong>A</strong>, and <strong>B</strong>. Click <strong>Select all</strong> and then <strong>OK</strong>.</li>
+<li>If DeepAcoustics cannot find the audio, it asks you to select the folder containing the audio files. Select <strong>01_OOI_2017_Feb_03</strong>.</li>
+</ul></li>
+<li><p><strong>Choose a starting audio file.</strong> Select the first audio file (<code>HYDDBA105OOI_20170203-020000.wav</code>) and click <strong>OK</strong>.</p></li>
+<li><p><strong>Adjust the display settings.</strong> Select <strong>Display Settings</strong> and enter:</p>
+<ul>
+<li><strong>Frequency Lower Limit (Hz):</strong> 0</li>
+<li><strong>Frequency Upper Limit (Hz):</strong> 200 (half of the 400 Hz sampling rate)</li>
+<li><strong>Units of Spectrogram Parameters:</strong> Samples</li>
+<li><strong>Window Size:</strong> 256</li>
+<li><strong>Overlap (%):</strong> 80 to 90</li>
+<li><strong>NFFT:</strong> 256</li>
+<li>Click <strong>OK</strong>. The spectrograms are redrawn with the new settings.</li>
+</ul></li>
+<li><p><strong>Adjust the Focus and Page durations.</strong></p>
+<ul>
+<li><strong>Page:</strong> set to <strong>300</strong> seconds, the full length of each audio file, so the lower panel shows the whole file and where all of its calls fall.</li>
+<li><strong>Focus:</strong> set to <strong>120</strong> seconds. This suits blue and fin whale calls: it is long enough to show whole blue whale B calls, which can last up to about 20 seconds, along with a series of fin whale pulses. Shorten it to look closely at individual fin whale pulses.</li>
+<li>These are suggestions; adjust both to whatever works best for you.</li>
+</ul></li>
+<li><p><strong>Adjust the color limits and color map.</strong></p>
+<ul>
+<li>Use <strong>+</strong> and <strong>-</strong> beside <strong>Low Color Limit</strong> and <strong>High Color Limit</strong> until the calls stand out clearly from the background noise.</li>
+<li>Try a different <strong>Color Map</strong> to see which makes the calls easiest to see.</li>
+<li>Check that you can see the calls and their boxes in both the upper (focus) and lower (page) panels.</li>
+</ul></li>
+<li><p><strong>Move from call to call.</strong> Use the <strong>Navigation</strong> panel at the bottom of the window to step through the calls.</p>
+<ul>
+<li>Move to the next or previous call, and notice how the call details on the left of the window update for each call.</li>
+<li>Use the pink file buttons to move to the next audio file, or to the next audio file that contains a call.</li>
+<li>Type a call number in the box at the top left of the window to jump straight to that call.</li>
+<li>Select <strong>Play Call</strong> (or press <strong>p</strong>) to listen to a call. If it is hard to hear, go to <strong>File &gt; Change Playback Rate</strong>.</li>
+</ul></li>
+<li><p><strong>Explore the call types.</strong> Use <strong>Filter Display</strong> to show only one call type at a time (for example, only <strong>A</strong> and <strong>B</strong> to see just the blue whale calls). Compare what you see with the examples and annotation criteria in <strong>04_Annotation_Summary.pdf</strong>.</p></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you change anything and want to save the session, save it under a new file name so the original test annotations stay unchanged for Exercise 3.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="exercise-2-training-a-network" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2-training-a-network">Exercise 2: Training a Network</h3>
+<p>In this exercise, you create training images from the five training annotations files and train a network on them. See <a href="./image_creation.html">Creating Training Images</a> and <a href="./train.html">Network Training</a> for a full explanation of each setting. The settings below are a good starting point, but the choice is up to you; the reference settings of the provided network are listed in <a href="#reference-settings">Exercise 3</a>.</p>
+<section id="part-a-create-the-training-images" class="level4">
+<h4 class="anchored" data-anchor-id="part-a-create-the-training-images">Part A: Create the training images</h4>
+<ol type="1">
+<li><p><strong>Open the tool.</strong> Go to <strong>Tools &gt; Network Training &gt; Create Detection Network Training Images</strong>.</p></li>
+<li><p><strong>Select the training annotations.</strong> In <strong>01_Training &gt; 01_Training_Audio</strong>, select all five <code>_Annotations.mat</code> files and click <strong>Open</strong>.</p></li>
+<li><p><strong>Point each file to its audio.</strong> Because the files were created on another computer, DeepAcoustics asks you to <strong>Select folder containing</strong> each file’s audio. The folder names match the instrument and date (or name) in each annotations file:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Annotations file</th>
+<th>Audio folder</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>HYDBBA106OOI_170105_Blue_Train_Annotations.mat</code></td>
+<td><code>HYDBBA106_20170105_Blue</code></td>
+</tr>
+<tr class="even">
+<td><code>HYDBBA106OOI_170106_BlueFin_Train_Annotations.mat</code></td>
+<td><code>HYDBBA106_20170106_BlueFin</code></td>
+</tr>
+<tr class="odd">
+<td><code>HYDBBA106OOI_170120_Blue_Train_Annotations.mat</code></td>
+<td><code>HYDBBA106_20170120_Blue</code></td>
+</tr>
+<tr class="even">
+<td><code>OOI_Train_A_Fin_Annotations.mat</code></td>
+<td><code>OOI_Train_A_5minAudio_Fin</code></td>
+</tr>
+<tr class="odd">
+<td><code>OOI_Train_B_Fin_Annotations.mat</code></td>
+<td><code>OOI_Train_B_5minAudio_Fin</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The dialog title names the audio file it is looking for, which tells you which folder to select.</li>
+<li>If you select the wrong folder, DeepAcoustics stops with an error that the file was not found. Start again from step 1.</li>
+</ul></li>
+<li><p><strong>Choose the call types.</strong> For each file, click <strong>Select all</strong> and then <strong>OK</strong>.</p></li>
+<li><p><strong>Enter the training image settings.</strong> In the <strong>Settings for Training Images</strong> dialog, enter:</p>
+<ul>
+<li><strong>Units of Spectrogram Parameters:</strong> Samples</li>
+<li><strong>Low Frequency Cutoff (Hz):</strong> 0</li>
+<li><strong>High Frequency Cutoff (Hz):</strong> 200</li>
+<li><strong>Window Size:</strong> 256</li>
+<li><strong>Overlap (%):</strong> 80 to 90</li>
+<li><strong>NFFT:</strong> 256</li>
+<li><strong>Optimize:</strong> pressed in (on), so the image length is calculated for you. With 300-pixel images, this gives an image length of about 38.4 seconds at 80% overlap, or 19.2 seconds at 90% overlap.</li>
+<li><strong>Image Resolution (pixels):</strong> 300 (the default)</li>
+<li><strong># of Augmented Duplicates:</strong> 0 to start</li>
+<li><strong>Randomly Add Noise:</strong> Yes. The annotations do not include noise, so DeepAcoustics adds noise examples automatically from the parts of the audio outside the call boxes.</li>
+<li><strong>Manually Select Validation Data:</strong> No.&nbsp;There are no separate validation files in this exercise; part of the training images will be set aside for validation when you train the network.</li>
+<li>Click <strong>OK</strong>.</li>
+</ul></li>
+<li><p><strong>Select the output folder.</strong> Select <strong>01_Training &gt; 02_Images</strong>.</p></li>
+<li><p><strong>Review the summary and save the image table.</strong> When the images are done, read the summary of calls, split calls, and noise (see <a href="./image_creation.html#understanding-the-summary">Understanding the summary</a>), and save the image table (<code>_Images.mat</code>) in the <strong>01_Training</strong> folder.</p>
+<ul>
+<li>Do not move or rename the <strong>02_Images</strong> folder afterward, because the image table stores the location of each image.</li>
+</ul></li>
+</ol>
+</section>
+<section id="part-b-train-the-network" class="level4">
+<h4 class="anchored" data-anchor-id="part-b-train-the-network">Part B: Train the network</h4>
+<ol start="8" type="1">
+<li><p><strong>Open the tool.</strong> Go to <strong>Tools &gt; Network Training &gt; Train Detection Network</strong> and select the image table you just saved.</p></li>
+<li><p><strong>Answer the setup questions.</strong></p>
+<ul>
+<li><strong>Do you have Validation Image Tables, too?</strong> No</li>
+<li><strong>Train from existing network?</strong> No</li>
+<li><strong>Call Types Warning:</strong> check that the list shows 18 Hz, 20 Hz, A, B, and Noise, and click <strong>Yes</strong>.</li>
+</ul></li>
+<li><p><strong>Choose the training settings.</strong></p>
+<ul>
+<li><strong>Base network:</strong> Tiny YOLO. It is the fastest to train; you can try the other architectures later.</li>
+<li><strong>Reduce image resolution?</strong> No, unless your GPU has crashed before.</li>
+<li><strong>Customize or Defaults:</strong> Customize.</li>
+<li><strong>Anchor boxes:</strong> select <strong>No</strong> so DeepAcoustics plots the mean IoU for 1 to 15 anchor boxes, and enter the number where the curve levels off (see <a href="./train.html#anchor-boxes">Anchor boxes</a>).</li>
+<li><strong>Solver:</strong> rmsprop, with an initial learning rate of 0.001.</li>
+<li><strong>Mini-batch size:</strong> 16 (Tiny YOLO can usually handle larger mini-batches, such as 64).</li>
+<li><strong>Maximum number of epochs:</strong> 10 is enough for a first try.</li>
+<li><strong>Use a proportion of the training data to validate?</strong> Yes, with a proportion of <strong>0.2</strong>. Click <strong>Yes</strong> in the <strong>Check Proportions</strong> dialog.</li>
+</ul></li>
+<li><p><strong>Watch the training progress.</strong> Follow the training and validation loss in the <strong>Training Progress</strong> window (see <a href="./train.html#monitoring-training">Monitoring Training</a>).</p></li>
+<li><p><strong>Save the network.</strong> Save the network in <strong>02_Networks</strong> with a name that describes it, for example <code>TinyYOLO_Tutorial_v1.mat</code>.</p></li>
+<li><p><strong>Record your settings.</strong> Fill in a row in <strong>Network_Settings_Template.xlsx</strong> for this network.</p></li>
+</ol>
+</section>
+<section id="part-c-try-other-settings" class="level4">
+<h4 class="anchored" data-anchor-id="part-c-try-other-settings">Part C: Try other settings</h4>
+<p>Once you have trained one network, try changing one setting at a time, training again, and comparing the networks in Exercise 3. For example:</p>
+<ul>
+<li><strong>Augmented duplicates:</strong> add 1 or 2 augmented duplicates of each image, or leave them out.</li>
+<li><strong>Image resolution:</strong> try a smaller or larger image resolution.</li>
+<li><strong>Overlap:</strong> compare 80% and 90% overlap.</li>
+<li><strong>Architecture:</strong> try CSP-DarkNet-53 or ResNet-50.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Larger settings need more computing power
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is a small training dataset, but more augmented duplicates, higher image resolutions, and larger architectures all increase the time, memory, and GPU resources needed to create images and train a network.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="exercise-3-testing-network-performance" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-3-testing-network-performance">Exercise 3: Testing Network Performance</h3>
+<p>In this exercise, you test a network against the test annotations from Exercise 1. You can test the Tiny YOLO network provided in <strong>02_Networks &gt; tiny_YOLO</strong>, the network you trained in Exercise 2, or both. See <a href="./test.html">Performance Testing</a> for an explanation of each result.</p>
+<section id="reference-settings" class="level4">
+<h4 class="anchored" data-anchor-id="reference-settings">Reference settings for the provided network</h4>
+<p>The network provided in <strong>02_Networks &gt; tiny_YOLO</strong> (<code>TinyYOLO.mat</code>) is the Pacific low-frequency (Pacific LF) multiclass network, the same network provided for Exercise 4. For reference, it was built with these settings:</p>
+<ul>
+<li><strong>Base network:</strong> Tiny YOLO (pre-trained), with a network input size of 320 × 320 pixels</li>
+<li><strong>Call types:</strong> 18 Hz, 20 Hz, 40-80 Hz, A, B, Bb, D, Noise, and UNID. The test file contains only 18 Hz, 20 Hz, A, and B.</li>
+<li><strong>Sampling rate:</strong> 400 Hz, with a frequency range of 0 to 200 Hz</li>
+<li><strong>Window Size and NFFT:</strong> 0.56 seconds (224 samples)</li>
+<li><strong>Overlap (%):</strong> 70</li>
+<li><strong>Image Length (s):</strong> 53.76 (optimized for 320-pixel images)</li>
+<li><strong>Anchor boxes:</strong> 10</li>
+<li><strong>Solver:</strong> rmsprop, with an initial learning rate of 0.0005</li>
+<li><strong>Mini-batch size:</strong> 64</li>
+<li><strong>Maximum number of epochs:</strong> 10</li>
+<li><strong>Validation:</strong> checked every 50 iterations; the saved network is the one with the lowest validation loss</li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>The provided network was trained on much more data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The Pacific LF network was trained on far more annotated data than the small training set in this tutorial, from several datasets and call types (see the Dryad repository). Use its settings and results as a reference point, but do not expect a network trained on the tutorial data alone to perform as well.</p>
+</div>
+</div>
+</section>
+<section id="running-the-test" class="level4">
+<h4 class="anchored" data-anchor-id="running-the-test">Running the test</h4>
+<ol type="1">
+<li><p><strong>Set the network folder.</strong> Go to <strong>File &gt; Select Network Folder</strong> and select <strong>02_Networks &gt; tiny_YOLO</strong> (or <strong>02_Networks</strong>, if you are testing your own network).</p></li>
+<li><p><strong>Open the tool.</strong> Go to <strong>Tools &gt; Performance Metrics</strong>.</p></li>
+<li><p><strong>Select the ground-truth file.</strong> Select <strong>03_Testing &gt; HYDDBA105OOI_20170203_Test_Detections.mat</strong>.</p>
+<ul>
+<li>If DeepAcoustics asks for the audio folder, select <strong>03_Testing &gt; 01_OOI_2017_Feb_03</strong>.</li>
+</ul></li>
+<li><p><strong>Choose the call types.</strong> Click <strong>Select all</strong> and then <strong>OK</strong>.</p></li>
+<li><p><strong>Select the network.</strong> Select <strong>TinyYOLO.mat</strong> (or your own network).</p></li>
+<li><p><strong>Enter the settings for running the network.</strong> Leave all three settings at <strong>0</strong> and click <strong>OK</strong>.</p></li>
+<li><p><strong>Let the network run.</strong> DeepAcoustics runs the network on all 49 test audio files.</p></li>
+<li><p><strong>Set the true positive threshold.</strong> Enter the IoU threshold a detection must reach to count as correct (see <a href="./test.html#true-positive-threshold">True Positive Threshold</a>). Try <strong>0.1</strong> (detecting the call at all) and then run the test again with <strong>0.5</strong> (detecting the call moderately well) to see how the results change.</p></li>
+<li><p><strong>Review the results.</strong> Look at the precision-recall curve and <strong>P/R Result</strong> for each call type, and the confusion matrix (see <a href="./test.html#understanding-the-results">Understanding the Results</a>).</p>
+<ul>
+<li>Which call types does the network detect well, and which are harder?</li>
+<li>Which call types does it confuse with each other, or with noise?</li>
+</ul></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Results for call types that are not in the test file
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>DeepAcoustics reports results for every call type the network was trained on, not only those in the test file. The Pacific LF network is part of a larger effort to categorize more call types than are in the test file. It detects nine call types:</p>
+<ul>
+<li><strong>18 Hz and 20 Hz:</strong> fin whale pulses</li>
+<li><strong>40-80 Hz:</strong> fin whale 40 Hz pulses</li>
+<li><strong>A, B, and D:</strong> blue whale A, B, and D calls</li>
+<li><strong>Bb:</strong> sei whale downsweeps</li>
+<li><strong>UNID:</strong> a catch-all category for unidentified calls</li>
+<li><strong>Noise:</strong> background noise</li>
+</ul>
+<p>The test file only contains annotations for 18 Hz, 20 Hz, A, and B. You will therefore see results and a confusion matrix row for 40-80 Hz, Bb, D, and UNID even though there are no annotated calls of those types to compare against. Any detections of those call types count as false positives here, so focus on the results for 18 Hz, 20 Hz, A, and B.</p>
+</div>
+</div>
+<ol start="10" type="1">
+<li><p><strong>Save the results.</strong> Save the performance metrics file and the network’s detections in <strong>02_Networks &gt; tiny_YOLO &gt; Detections_and_Performance</strong>.</p>
+<ul>
+<li>Rename both files to include the test file, the network, and the IoU threshold, for example <code>OOI_20170203_Test_TinyYOLO_IoU0.1_PerformanceMetrics.mat</code>.</li>
+</ul></li>
+<li><p><strong>Record the results.</strong> Fill in the test results for this network in <strong>Network_Settings_Template.xlsx</strong>.</p></li>
+<li><p><strong>Look at the detections.</strong> Load the network’s detections file with <strong>File &gt; Load Detections</strong> and step through them, as in Exercise 1, to see where the network did well and where it made mistakes.</p></li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="exercise-4-deploying-a-network-on-new-audio" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-4-deploying-a-network-on-new-audio">Exercise 4: Deploying a Network on New Audio</h3>
+<p>In this exercise, you run a trained multiclass network on 24 audio files from SanctSound site MB01, add the date and time to the detections, and review them. See <a href="./deployment.html">Network Deployment</a> for more detail.</p>
+<section id="part-a-detect-calls" class="level4">
+<h4 class="anchored" data-anchor-id="part-a-detect-calls">Part A: Detect calls</h4>
+<ol type="1">
+<li><p><strong>Set the audio folder.</strong> Go to <strong>File &gt; Select Audio Folder</strong> and select <strong>05_Deployment_Call_Review &gt; SanctSound_MB01</strong>.</p></li>
+<li><p><strong>Set the network folder.</strong> Go to <strong>File &gt; Select Network Folder</strong> and select <strong>05_Deployment_Call_Review &gt; Network</strong>.</p></li>
+<li><p><strong>Start detection.</strong> In the <strong>Detect, Load, &amp; Record</strong> section, select <strong>Detect Calls</strong>.</p></li>
+<li><p><strong>Select the audio files.</strong> Select all 24 audio files.</p></li>
+<li><p><strong>Select the network.</strong> Select <strong>Pacific_LF_tinyYOLO_2026_v1.mat</strong>.</p></li>
+<li><p><strong>Select the output folder.</strong> Select <strong>05_Deployment_Call_Review</strong>.</p></li>
+<li><p><strong>Enter the settings for running the network.</strong></p>
+<ul>
+<li><strong>Total Analysis Length (Seconds; 0 = Full Duration):</strong> 0</li>
+<li><strong>Score Threshold (0-1):</strong> 0 keeps every detection. Try a higher value, such as 0.5, to keep only the more confident detections.</li>
+<li><strong>Append Date to FileName (1 = yes):</strong> 0, or 1 to add the date and time of the run to the file name.</li>
+<li>Click <strong>OK</strong>.</li>
+</ul></li>
+<li><p><strong>Watch the progress.</strong> Each file is about 6 hours long, so this is about 144 hours of audio.</p>
+<ul>
+<li>The progress bar shows the <strong>Detection Speed</strong> and the number of <strong>Call Fragments Found</strong> in each file.</li>
+<li>The MATLAB Command Window shows the number of calls found in each file.</li>
+</ul></li>
+<li><p><strong>Find the detections file.</strong> DeepAcoustics saves the detections automatically in <strong>05_Deployment_Call_Review</strong>. The file name starts with the first audio file’s name and ends with <code>_24AudFiles_Detections.mat</code>.</p></li>
+</ol>
+</section>
+<section id="part-b-add-the-date-and-time" class="level4">
+<h4 class="anchored" data-anchor-id="part-b-add-the-date-and-time">Part B: Add the date and time</h4>
+<ol start="10" type="1">
+<li><p><strong>Open the tool.</strong> Go to <strong>Tools &gt; File Management &gt; Add Date/Time</strong>.</p></li>
+<li><p><strong>Confirm the overwrite warning.</strong> Click <strong>Yes</strong>.</p></li>
+<li><p><strong>Select the detections file</strong> you created in Part A.</p>
+<ul>
+<li>DeepAcoustics reads the start date and time of each audio file from its name. For example, <code>SanctSound_MB01_06_671617061_201110004754.wav</code> started on 2020-11-10 at 00:47:54.</li>
+</ul></li>
+<li><p><strong>Check the date and time.</strong> Drag the detections file into the MATLAB Command Window, double-click the <strong>Calls</strong> table in the Workspace panel, and scroll right to the <strong>StTime</strong> column to check that each call has a date and time.</p></li>
+</ol>
+</section>
+<section id="part-c-review-the-detections" class="level4">
+<h4 class="anchored" data-anchor-id="part-c-review-the-detections">Part C: Review the detections</h4>
+<ol start="14" type="1">
+<li><p><strong>Load the detections.</strong> Go to <strong>File &gt; Load Detections</strong>, select the detections file, select all call types, and choose a starting audio file.</p></li>
+<li><p><strong>Adjust the display.</strong> Use the display settings from Exercise 1. Because these files are about 6 hours long, use a shorter <strong>Page</strong> duration (for example, 300 seconds) and move through each file page by page.</p></li>
+<li><p><strong>Review the calls.</strong> Accept correct detections (<strong>a</strong>), reject false positives (<strong>r</strong>), and relabel calls with the wrong call type (see <a href="./annotate.html">Annotation Review</a>).</p>
+<ul>
+<li>To review many detections at once, use <strong>Tools &gt; Call Review</strong>.</li>
+</ul></li>
+<li><p><strong>Save your review.</strong> Select <strong>Save Session</strong> and save the reviewed detections under a new file name.</p></li>
+<li><p><strong>Export to Raven (optional).</strong> With the reviewed detections loaded, go to <strong>File &gt; Import/Export &gt; Export to Raven</strong> and choose <strong>Selection Table</strong> to view the detections in Raven.</p></li>
+</ol>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -166,3 +166,5 @@ A large number of split calls means many calls are longer than your image length
 :::
 
 The number of calls is not the same as the number of images. A single image can contain several calls, and each noise box gets its own image, so the two counts will usually differ. After you save the image table, the MATLAB Command Window reports the total number of images created (for example, "Created 2751 Training Images"). This is the number of images in the image table, **including** augmented duplicates, and should match the number of image files in your output folder and its `ImgAug` subfolder.
+
+{{< video videos/image-creation.mp4 >}}

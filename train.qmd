@@ -34,7 +34,7 @@ Because of MATLAB limitations, you cannot later add new call types to a network.
 
 ### Training Settings
 
-A series of dialogs then asks for the training settings.
+A series of dialogs then asks for the training settings. The first prompts you with the architecture you would like to select.
 
 #### Base network
 
@@ -70,8 +70,12 @@ DeepAcoustics asks **Do you already know how many anchor boxes you want to use?*
 When you select **No**, here is what DeepAcoustics calculates:
 
 1.  For each number of anchors from 1 to 15, it groups the widths and heights of all the bounding boxes in your training images into that many clusters (using MATLAB's `estimateAnchorBoxes`, a clustering method that groups boxes by how much they overlap). The center of each cluster becomes one anchor box shape.
+
 2.  For each count, it calculates the **mean IoU**: how well, on average, each of your annotated boxes overlaps with its closest-matching anchor shape. A mean IoU of 1 would mean every box matched an anchor exactly.
+
 3.  It plots **Number of Anchors** (x-axis) against **Mean IoU** (y-axis).
+
+    ![](images/number-of-anchor-boxes.jpg){width="569"}
 
 Choose the number where the curve starts to level off (the "elbow"). Beyond that point, adding more anchors improves the fit only slightly while increasing computation. In this example, the curve rises steeply up to about 6 anchors and then flattens, and 6 anchors has also worked well for us in the past, so we enter **6**. We also recommend trying a few values and comparing the resulting networks.
 
@@ -79,7 +83,7 @@ If the number you enter does not suit the architecture, DeepAcoustics rounds it 
 
 #### Solver (optimizer)
 
-The solver, or optimizer, is the algorithm that adjusts the network's weights during training to reduce the loss (the error between the network's predictions and your annotations). DeepAcoustics offers three:
+The solver, or optimizer, is the algorithm that adjusts the network's weights during training to reduce the loss (the error between the network's predictions and your annotations). DeepAcoustics currently offers three:
 
 - **sgdm (stochastic gradient descent with momentum):** after each mini-batch, takes a step in the direction that reduces the loss, using the same step size (learning rate) for every weight. "Momentum" carries over part of the previous steps, which smooths out the path and helps it keep moving in a consistent direction. It is simple and reliable but can need more epochs to converge.
 - **rmsprop (root mean square propagation):** adjusts the step size separately for each weight, based on how large that weight's recent updates have been. Weights with large or erratic updates take smaller steps, and weights with small, steady updates take larger ones. This often makes training more stable. RMSProp has worked well for us, and we typically use it with its default learning rate.
@@ -96,18 +100,21 @@ During training, the training images are shuffled and divided into small groups 
 - **Larger mini-batches** give a more stable estimate of which direction to adjust the weights and need fewer updates per epoch, but they use more GPU memory.
 - **Smaller mini-batches** use less memory and make more frequent, noisier updates.
 
-The default is **16**, because larger architectures such as CSP-DarkNet-53 can run out of memory with bigger mini-batches. Smaller networks such as Tiny YOLO can usually handle larger mini-batches, such as **64**.
+The default is **16**, because larger architectures such as CSP-DarkNet-53 can run out of memory with bigger mini-batches. Smaller networks such as Tiny YOLO can usually handle larger mini-batches, such as **64** and above.
 
 #### Maximum number of epochs
 
-An epoch is one complete pass through all of the training images (see [Key hyperparameters](network_fundamentals.qmd#key-hyperparameters)). The default maximum is **30**. More epochs give the network more chances to learn, but training too long can lead to overfitting, where the network memorizes the training images instead of learning patterns that generalize to new data. Watch the training progress window (below) and stop early if the validation loss starts to rise. In this example, we enter **10**.
+An epoch is one complete pass through all of the training images (see [Key hyperparameters](network_fundamentals.qmd#key-hyperparameters)). The default maximum is **30**. More epochs give the network more chances to learn, but training too long can lead to overfitting, where the network memorizes the training images instead of learning patterns that generalize to new data. Watch the training progress window (below) and stop early if the validation loss starts to rise.
 
 #### Validation data
 
 If you did not provide validation image tables, DeepAcoustics asks **Would you like to use a proportion of your training data to validate (recommended to assess overfitting)?**
 
 - **Yes:** set aside part of your training images for validation. These images are not used to train the network; instead, the network is checked against them during training to show how well it handles data it has not learned from. This is what lets you spot overfitting.
-- **No:** train on all of the images without validation.
+
+- **No:** train on all of the images without validation (not recommended).
+
+  ![](images/validation-data-prompt.jpg){width="473"}
 
 The dialog also warns that, because of MATLAB data type limitations, using validation data may stop the training images from being reshuffled between epochs, which could itself contribute to overfitting.
 
@@ -123,6 +130,8 @@ With a multiclass network, DeepAcoustics tries to make sure every call type is r
 
 DeepAcoustics then shows a **Check Proportions** dialog with the percentage of each call type's images that ended up in the validation set. The rarest call type will be close to the proportion you entered, and more common call types will be lower, because they all receive about the same number of validation images. In this example, with a proportion of 0.2, call type A (the rarest) is at 19.8%, and the more common call types are between 4.8% and 7.9%. Click **Yes** to proceed (clicking **No** cancels training).
 
+![](images/validation-percentage-by-calls.jpg){fig-align="center"}
+
 ------------------------------------------------------------------------
 
 ### Monitoring Training
@@ -134,6 +143,8 @@ Once the settings are confirmed, training begins and the **Training Progress** w
 - **Progress panel (right):** shows the progress bar, start time, elapsed time, current epoch, iteration, and learning rate. The **Export as Image** button saves a picture of the plot.
 
 How to read the curves is explained in [Key hyperparameters](network_fundamentals.qmd#key-hyperparameters). In short: if both losses fall together, the network is still learning; if both are low and stable, the fit is good; and if the validation loss starts to rise while the training loss keeps falling, the network is overfitting.
+
+![](images/training-progress-window.jpg){fig-align="center"}
 
 #### The MATLAB Command Window
 
