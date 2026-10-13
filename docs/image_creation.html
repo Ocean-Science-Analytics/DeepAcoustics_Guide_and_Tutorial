@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>image_creation – DeepAcoustics Guide and Tutorial</title>
+<title>Creating Training Images – DeepAcoustics Guide and Tutorial</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -43,6 +43,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-a3529ce74928e40231a46fb68e134eab.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -226,15 +228,24 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#creating-the-images" id="toc-creating-the-images" class="nav-link active" data-scroll-target="#creating-the-images">Creating the Images</a></li>
+  <li><a href="#training-image-settings" id="toc-training-image-settings" class="nav-link" data-scroll-target="#training-image-settings">Training Image Settings</a></li>
+  <li><a href="#choosing-image-length-and-resolution" id="toc-choosing-image-length-and-resolution" class="nav-link" data-scroll-target="#choosing-image-length-and-resolution">Choosing Image Length and Resolution</a></li>
+  <li><a href="#understanding-the-summary" id="toc-understanding-the-summary" class="nav-link" data-scroll-target="#understanding-the-summary">Understanding the Summary</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./training_testing.html">Network Training &amp; Testing</a></li><li class="breadcrumb-item"><a href="./image_creation.html">Creating Training Images</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">image_creation</h1>
+<h1 class="title">Creating Training Images</h1>
 </div>
 
 
@@ -251,8 +262,193 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>Before DeepAcoustics can train a detection network, it converts your annotated audio into a set of spectrogram images, each paired with the bounding boxes of the calls it contains. This page walks through creating those training images and explains each of the image settings.</p>
+<p>The example on this page uses five training annotation (detections) files containing blue whale A and B calls and fin whale 18 Hz and 20 Hz calls, recorded on Ocean Observatories Initiative (OOI) hydrophones off Newport, Oregon. These files are part of a Dryad repository from a recent multiclass baleen whale effort, available here: <strong>Annotated training and evaluation data and DeepAcoustics-derived networks for multi-class baleen whale calls</strong> (doi: <a href="https://doi.org/10.5061/dryad.x0k6djj2d" class="uri">https://doi.org/10.5061/dryad.x0k6djj2d</a>)</p>
+<hr>
+<section id="creating-the-images" class="level3">
+<h3 class="anchored" data-anchor-id="creating-the-images">Creating the Images</h3>
+<ol type="1">
+<li><p><strong>Open the tool.</strong> Go to <strong>Tools &gt; Network Training &gt; Create Detection Network Training Images</strong>.</p></li>
+<li><p><strong>Select the detection files.</strong> Choose one or more detections files to build the training images from, then click <strong>Open</strong>. In this example, all five files are selected. Keeping your annotations in separate detections files (for example, by site, deployment, or call type) makes it easy to train on different combinations of files later.</p></li>
+<li><p><strong>Choose the call types.</strong> As each file loads, DeepAcoustics asks which call types to include. Each file lists the call types annotated in it, so the options can differ from file to file. This lets you annotate everything in your data once and then train a network for only certain species or call types. In this example, all call types are selected in every file.</p></li>
+<li><p><strong>Set the training image settings.</strong> The <strong>Settings for Training Images</strong> dialog opens. The settings are described in detail <a href="#training-image-settings">below</a>. Click <strong>OK</strong> when you are done.</p>
+<p><img src="images/image-settings-dialog.jpg" class="img-fluid" width="490"></p></li>
+<li><p><strong>Select the output folder.</strong> Choose the folder where the training images will be saved. If you turned on <strong>Manually Select Validation Data</strong>, DeepAcoustics then asks for the validation detections files and a separate folder for the validation images (see <a href="#toggles">below</a>).</p></li>
+<li><p><strong>Let the images generate.</strong> DeepAcoustics creates the spectrogram images, and you will see them start to appear in your output folder. Augmented duplicates, if any, are saved in an <code>ImgAug</code> subfolder.</p></li>
+<li><p><strong>Review the summary and save the image table.</strong> When finished, DeepAcoustics shows a summary of the calls and noise included (see <a href="#understanding-the-summary">Understanding the summary</a>) and asks where to save the image table. By default, it is named after the first detections file, followed by <code>&amp;More</code> if you selected more than one file, and <code>_Images.mat</code>. This <code>.mat</code> file lists every training image and the bounding boxes in it, along with the spectrogram settings used, and it is what you select when training the network.</p>
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="videos/image-creation.mp4"></video></div></li>
+</ol>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Choose the image table location carefully
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The image table stores the full path to each training image. If you move or rename the image folder after creating the table, DeepAcoustics will not be able to find the images. Decide where the images and table will live before you create them. (A fix for this is in progress.)</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="training-image-settings" class="level3">
+<h3 class="anchored" data-anchor-id="training-image-settings">Training Image Settings</h3>
+<p>The <strong>Settings for Training Images</strong> dialog controls how your audio is turned into images. These settings matter a great deal for network performance, so it is worth taking time to choose them.</p>
+<section id="annotation-metadata" class="level4">
+<h4 class="anchored" data-anchor-id="annotation-metadata">Annotation metadata</h4>
+<p>At the top of the dialog, DeepAcoustics summarizes the annotations you selected, to help you choose the settings below:</p>
+<ul>
+<li><strong>Min Dur (s) and Max Dur (s):</strong> the shortest and longest annotated call, in seconds.</li>
+<li><strong>Median Dur (s):</strong> the median call duration.</li>
+<li><strong>90% Quant Dur (s):</strong> the duration that 90% of your calls are shorter than. This is a useful guide for image length because it ignores the few very longest calls.</li>
+<li><strong>Min Freq (Hz) and Max Freq (Hz):</strong> the lowest and highest upper frequency limit among your annotated boxes. Use <strong>Max Freq (Hz)</strong> to check that your <strong>High Frequency Cutoff (Hz)</strong> is high enough to include your calls.</li>
+<li><strong>Min SR (Hz) and Max SR (Hz):</strong> the lowest and highest sampling rate among your audio files. These should be the same. If your files have different sampling rates, DeepAcoustics warns you and uses the lowest one.</li>
+</ul>
+</section>
+<section id="spectrogram-settings" class="level4">
+<h4 class="anchored" data-anchor-id="spectrogram-settings">Spectrogram settings</h4>
+<p>These settings work the same way as the spectrogram settings described under <a href="./import.html">Display Settings</a>, but here they control the training images rather than the display. Make sure the window size and NFFT suit the call types you are training on.</p>
+<ul>
+<li><strong>Units of Spectrogram Parameters:</strong> whether <strong>Window Size</strong> and <strong>NFFT</strong> are entered as a number of <strong>Samples</strong> or as a duration in <strong>Seconds</strong>.
+<ul>
+<li>When using <strong>Samples</strong>, DeepAcoustics treats the sample counts as if the audio were sampled at twice the <strong>High Frequency Cutoff (Hz)</strong> (the “effective Nyquist” noted in red in the dialog). If you change the High Frequency Cutoff, the sample counts are updated automatically so the window keeps the same duration in seconds.</li>
+</ul></li>
+<li><strong>Low Frequency Cutoff (Hz) and High Frequency Cutoff (Hz):</strong> the frequency range included in the training images. The High Frequency Cutoff defaults to half the sampling rate and must not be set above the bandwidth available in your audio. Any part of a call that falls outside this range is excluded from training, and DeepAcoustics warns you if this happens.</li>
+<li><strong>Window Size:</strong> the length of each chunk of audio analyzed for one column of the spectrogram. Longer windows give finer frequency resolution but blur timing; shorter windows show timing more sharply but blur frequency.</li>
+<li><strong>Overlap (%):</strong> how much each window overlaps the next. It must be less than 95%.</li>
+<li><strong>NFFT:</strong> the number of points in the Fourier transform of each window, which sets the spacing between frequency bins. It is usually set equal to the window size.</li>
+</ul>
+</section>
+<section id="image-settings" class="level4">
+<h4 class="anchored" data-anchor-id="image-settings">Image settings</h4>
+<ul>
+<li><strong>Image Length (s):</strong> the duration of audio shown in each training image. By default, it is set to twice the 90% quantile duration (rounded), unless <strong>Optimize</strong> is on.</li>
+<li><strong>Optimize:</strong> when this button is pressed in (highlighted), DeepAcoustics calculates the image length automatically so that each pixel across the image represents exactly one time step of the spectrogram. The image length then updates on its own whenever you change the <strong>NFFT</strong>, <strong>Overlap (%)</strong>, or <strong>Image Resolution (pixels)</strong>, and the Image Length field cannot be edited. Press it again to turn it off and enter an image length yourself.</li>
+<li><strong>Image Resolution (pixels):</strong> the width and height of each training image, in pixels. Images are always square, and the default is 300 × 300. Larger images can show more detail, but they take longer to train and use more memory, and you will eventually run into the limits of your computer.</li>
+<li><strong># of Augmented Duplicates:</strong> how many extra, slightly altered copies of each training image to create. Each duplicate randomly varies the image contrast and the FFT size (up to two powers of two smaller or larger than your setting), which gives the network more varied examples. This can help when you have a small number of training annotations. The default is 0 (no duplicates).</li>
+</ul>
+</section>
+<section id="toggles" class="level4">
+<h4 class="anchored" data-anchor-id="toggles">Toggles</h4>
+<ul>
+<li><p><strong>Randomly Add Noise:</strong> when set to <strong>Yes</strong>, DeepAcoustics adds “Noise” boxes to unannotated parts of your audio before creating the images. It aims for roughly as many noise boxes as calls, with sizes based on the range of your call box sizes and within your frequency limits. This gives the network examples of what is <em>not</em> a call. We recommend <strong>Yes</strong>, unless noise has already been annotated in your files (if a file already contains Noise, DeepAcoustics skips it).</p></li>
+<li><p><strong>Manually Select Validation Data:</strong> controls how validation data are chosen. Validation data are held back from training and used to check how well the network is learning (and whether it is overfitting) as training progresses.</p>
+<ul>
+<li><strong>No:</strong> all of your selected files are used for training images, and a percentage of them is automatically set aside for validation during training. This is the simplest option and was the only option in earlier versions of DeepAcoustics.</li>
+<li><strong>Yes:</strong> after you click <strong>OK</strong>, you choose separate detections files to use only for validation, plus a separate output folder for the validation images, which must be different from the training image folder. DeepAcoustics creates a second image table (ending in <code>_ValImages.mat</code>). This gives you more control over exactly which calls and audio files are used for validation, which can ultimately produce a more robust network.</li>
+</ul>
+<p>In this example, <strong>Manually Select Validation Data</strong> is set to <strong>No</strong> because all of the annotations are in one folder, and with multiclass data it is harder to set aside a healthy sample of every call type for both training and validation.</p></li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Randomly adding noise changes your detections files
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When <strong>Randomly Add Noise</strong> is set to <strong>Yes</strong>, the new noise boxes are <strong>written into your existing detections files</strong>. Keep a backup copy of your detections files if you want to preserve the originals.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="choosing-image-length-and-resolution" class="level3">
+<h3 class="anchored" data-anchor-id="choosing-image-length-and-resolution">Choosing Image Length and Resolution</h3>
+<section id="why-image-length-matters" class="level4">
+<h4 class="anchored" data-anchor-id="why-image-length-matters">Why image length matters</h4>
+<p>DeepAcoustics is an object detection tool, so the training images should not be cropped tightly around each call. The network needs to see the call <em>in context</em>, including the background noise around it, so it can learn what is and is not a call. A longer image length captures more representative noise around each bounding box, and an image can contain several annotations. An image length that is too short is a problem because it does not capture enough of that surrounding noise.</p>
+<p>As a rule of thumb, an image length of about 2 to 3 times the duration of your longest typical call includes a good amount of noise. If a call is longer than the image length, it is split across images, and DeepAcoustics reports how many calls were split in the summary.</p>
+</section>
+<section id="how-optimize-calculates-image-length" class="level4">
+<h4 class="anchored" data-anchor-id="how-optimize-calculates-image-length">How Optimize calculates image length</h4>
+<p>Each column of pixels in a training image should ideally represent one time step (hop) of the spectrogram. Optimize uses this to calculate the image length:</p>
+<ul>
+<li><strong>Time step (hop) in seconds</strong> = NFFT in seconds × (1 − Overlap ÷ 100)</li>
+<li><strong>Optimized image length</strong> = time step × Image Resolution (pixels)</li>
+</ul>
+<p>For the example dataset shown in the dialog (a 400 Hz sampling rate with a High Frequency Cutoff of 200 Hz, an NFFT of 512 samples, 90% overlap, and an image resolution of 300 pixels):</p>
+<ul>
+<li>NFFT in seconds = 512 ÷ 400 Hz = 1.28 s</li>
+<li>Time step = 1.28 s × 0.1 = 0.128 s</li>
+<li>Optimized image length = 0.128 s × 300 pixels = <strong>38.4 s</strong></li>
+</ul>
+<p>As another example, with a 32,000 Hz sampling rate, an NFFT of 1024 samples, 90% overlap, and 288 pixels, the time step is 1024 ÷ 32,000 × 0.1 = 0.0032 s, giving an optimized image length of about 0.92 s.</p>
+<ul>
+<li><strong>If the image is longer than this,</strong> neighboring time steps are squeezed together to fit the available pixels, so some time resolution is lost.</li>
+<li><strong>If the image is shorter than this,</strong> several pixels are used to show the same time step, which is an inefficient use of the image.</li>
+<li><strong>Doubling the NFFT</strong> (for example, from 1024 to 2048) doubles the optimized image length, because each time step becomes twice as long. It also increases the frequency detail, which the available pixels may not be able to show in full.</li>
+</ul>
+<p>When you click <strong>OK</strong>, DeepAcoustics also checks your settings and warns you if the image resolution is smaller than the number of frequency bins in your chosen bandwidth, or smaller than the number of time steps in your image length. In either case, some detail will be lost when the spectrogram is resized to fit the image.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Balancing image length against calls being split
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If your longest calls are much longer than the optimized image length, you have a trade-off: keep the optimized length and accept that some calls are split across images, or use a longer image length and accept lower time resolution. There is no single right answer, and the best way to find out which works better for your calls is to try both and compare the resulting networks.</p>
+</div>
+</div>
+</section>
+<section id="image-resolution-and-the-network-input-size" class="level4">
+<h4 class="anchored" data-anchor-id="image-resolution-and-the-network-input-size">Image resolution and the network input size</h4>
+<p>The image resolution sets how many pixels each training image has, not how much time or frequency it shows. Every training image covers exactly the same duration and bandwidth.</p>
+<p>When you train, the images are resized to the network’s input size. This is a change in resolution, not a “zoom” into part of the image: the whole image is kept and simply shown with more or fewer pixels.</p>
+<ul>
+<li><strong>TinyYOLO</strong> requires an input size that is a multiple of 32, so a 300-pixel image is rounded to 288 pixels.</li>
+<li><strong>CSP-DarkNet-53</strong> asks you for an input size, because 288 pixels may be too large for your GPU.</li>
+<li><strong>ResNet-50</strong> uses a fixed input size of 224 × 224.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="understanding-the-summary" class="level3">
+<h3 class="anchored" data-anchor-id="understanding-the-summary">Understanding the Summary</h3>
+<p>When the images have been created, DeepAcoustics displays a summary box like this one, from the example dataset:</p>
+<pre><code>Final Call Information:
+# Total Calls in Det Files: 4168
+# Whole Calls in Images File: 3734
+# Split Calls in Images File: 434
+# Total Call Pieces in Images File: 4580
+# Noise in Images File: 2287
+# Total Calls in Det Files (Val): 0
+# Whole Calls in Images File (Val): 0
+# Split Calls in Images File (Val): 0
+# Total Call Pieces in Images File (Val): 0
+# Noise in Images File (Val): 0</code></pre>
+<ul>
+<li><strong># Total Calls in Det Files:</strong> the number of accepted calls (not including noise) in the detections files you selected. Rejected calls are not used. The example has 4,168 calls.</li>
+<li><strong># Whole Calls in Images File:</strong> calls that fit entirely within a single image (3,734 in the example).</li>
+<li><strong># Split Calls in Images File:</strong> calls that were longer than the image length, or fell across an image boundary, and had to be split across images (434 in the example). Whole calls plus split calls always add up to the total number of calls (3,734 + 434 = 4,168).</li>
+<li><strong># Total Call Pieces in Images File:</strong> the total number of call boxes across all images, counting each piece of a split call separately. In the example, the 434 split calls became 846 pieces, so the images contain 3,734 + 846 = 4,580 call boxes.</li>
+<li><strong># Noise in Images File:</strong> the number of noise boxes included (2,287 in the example). This count currently also includes the noise in augmented duplicates.</li>
+<li><strong>(Val) counts:</strong> the same counts for the validation images. These are only filled in if you set <strong>Manually Select Validation Data</strong> to <strong>Yes</strong>. In the example, they are all 0 because no separate validation files were selected; instead, a portion of the training images is randomly set aside for validation when the network is trained.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Checking for split calls
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A large number of split calls means many calls are longer than your image length. In the example, about 10% of calls were split, which reflects the long blue whale calls relative to the image length. If many of your calls are being split, consider a longer image length (see <a href="#choosing-image-length-and-resolution">Choosing Image Length and Resolution</a>).</p>
+</div>
+</div>
+<p>The number of calls is not the same as the number of images. A single image can contain several calls, and each noise box gets its own image, so the two counts will usually differ. After you save the image table, the MATLAB Command Window reports the total number of images created (for example, “Created 2751 Training Images”). This is the number of images in the image table, <strong>including</strong> augmented duplicates, and should match the number of image files in your output folder and its <code>ImgAug</code> subfolder.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -656,6 +852,7 @@ ul.task-list li input[type="checkbox"] {
   });
   </script>
 </div> <!-- /content -->
+<script>videojs(video_shortcode_videojs_video1);</script>
 
 
 

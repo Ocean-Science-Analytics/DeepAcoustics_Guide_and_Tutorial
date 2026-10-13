@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>train – DeepAcoustics Guide and Tutorial</title>
+<title>Network Training – DeepAcoustics Guide and Tutorial</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -226,15 +226,23 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#starting-training" id="toc-starting-training" class="nav-link active" data-scroll-target="#starting-training">Starting Training</a></li>
+  <li><a href="#training-settings" id="toc-training-settings" class="nav-link" data-scroll-target="#training-settings">Training Settings</a></li>
+  <li><a href="#monitoring-training" id="toc-monitoring-training" class="nav-link" data-scroll-target="#monitoring-training">Monitoring Training</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./training_testing.html">Network Training &amp; Testing</a></li><li class="breadcrumb-item"><a href="./train.html">Network Training</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">train</h1>
+<h1 class="title">Network Training</h1>
 </div>
 
 
@@ -251,8 +259,186 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>Once you have created your training images (see <a href="./image_creation.html">Creating Training Images</a>), you can train a detection network. This page walks through each dialog in the training process and explains the settings. The architectures, hyperparameters, and anchor boxes referred to here are described in more detail in <a href="./network_fundamentals.html">Architectures, Hyperparameters &amp; Metrics</a>.</p>
+<hr>
+<section id="starting-training" class="level3">
+<h3 class="anchored" data-anchor-id="starting-training">Starting Training</h3>
+<ol type="1">
+<li><p><strong>Open the tool.</strong> Go to <strong>Tools &gt; Network Training &gt; Train Detection Network</strong>.</p></li>
+<li><p><strong>Select the image table(s).</strong> DeepAcoustics asks you to select the image table(s) (<code>_Images.mat</code>) for training. You can select more than one, for example to combine image tables made from different datasets, but they must all be in the same folder. It is usually easiest to keep your detections files in one folder, create an image table from them, and save any later image tables in that same folder. In this example, we select the image table created on the previous page.</p></li>
+<li><p><strong>Add validation image tables (if you have them).</strong> DeepAcoustics asks <strong>Do you have Validation Image Tables, too?</strong></p>
+<ul>
+<li><strong>Yes:</strong> select the validation image table(s) (<code>_ValImages.mat</code>). You will only have these if you set <strong>Manually Select Validation Data</strong> to <strong>Yes</strong> when creating the training images. The validation tables must contain the same call types as the training tables.</li>
+<li><strong>No:</strong> continue without them. You will have the option to set aside a portion of your training data for validation later on. In this example, we select <strong>No</strong>.</li>
+</ul></li>
+<li><p><strong>Choose whether to build on an existing network.</strong> DeepAcoustics asks <strong>Train from existing network?</strong></p>
+<ul>
+<li><strong>No:</strong> train a new network from scratch. <strong>Select No.</strong> This is the option to use for now.</li>
+<li><strong>Yes</strong> and <strong>Yes - TensorFlow:</strong> build on an existing DeepAcoustics network or a TensorFlow model. These options are still being developed and improved, so we do not recommend them at this time.</li>
+</ul></li>
+<li><p><strong>Confirm the call types.</strong> A <strong>Call Types Warning</strong> lists the call types the network will be trained on (in this example, 18 Hz, 20 Hz, A, B, and Noise). If you added random noise when creating the training images, <strong>Noise</strong> appears as one of the call types. Click <strong>Yes</strong> to proceed.</p></li>
+</ol>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Call types are fixed once a network is trained
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Because of MATLAB limitations, you cannot later add new call types to a network. If you want a network that detects additional call types in the future, you will need to train a new network from scratch with all of the call types included.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="training-settings" class="level3">
+<h3 class="anchored" data-anchor-id="training-settings">Training Settings</h3>
+<p>A series of dialogs then asks for the training settings.</p>
+<section id="base-network" class="level4">
+<h4 class="anchored" data-anchor-id="base-network">Base network</h4>
+<p>Choose the base network (architecture) to train from:</p>
+<ul>
+<li><strong>Tiny YOLO (pre-trained):</strong> the smallest and fastest to train. A good starting point for testing your other settings. This example uses Tiny YOLO.</li>
+<li><strong>CSP-DarkNet-53 (pre-trained):</strong> the largest and most complex architecture, with an extra detection head.</li>
+<li><strong>ResNet-50 (pre-trained):</strong> in between the two in size. It always uses an input size of 224 × 224 pixels.</li>
+<li><strong>ResNet-50 (blank):</strong> a ResNet-50 that has not been pre-trained. This option is still being evaluated.</li>
+</ul>
+<p>See <a href="./network_fundamentals.html#available-architectures">Available architectures</a> for a comparison.</p>
+</section>
+<section id="image-resolution" class="level4">
+<h4 class="anchored" data-anchor-id="image-resolution">Image resolution</h4>
+<p>For Tiny YOLO and CSP-DarkNet-53, DeepAcoustics asks <strong>Would you like to reduce your image resolution b/c your GPU crashed the last time you tried this?</strong></p>
+<ul>
+<li><strong>No - I believe in my GPU:</strong> keep the image resolution. Choose this if you have a reasonably powerful computer and GPU.</li>
+<li><strong>Yes - I want to edit:</strong> enter a smaller image size. Use this if training has previously crashed because your computer ran out of GPU memory.</li>
+</ul>
+<p>These architectures require an image size that is a multiple of 32, so DeepAcoustics rounds the size automatically (for example, 300-pixel training images are used at 288 pixels). Choosing a size larger than the resolution you used to create the images does not add detail: the effective resolution stays at the resolution of your training images.</p>
+</section>
+<section id="customize-or-use-defaults" class="level4">
+<h4 class="anchored" data-anchor-id="customize-or-use-defaults">Customize or use defaults</h4>
+<p>DeepAcoustics asks whether you want to <strong>Customize</strong> your network options or use the <strong>Defaults</strong>. We recommend <strong>Customize</strong> in most cases. If you choose <strong>Defaults</strong>, DeepAcoustics uses 8 anchor boxes (9 for CSP-DarkNet-53), the SGDM solver, a learning rate of 0.01, a mini-batch size of 16, 30 epochs, and no validation data, and skips the rest of the settings below.</p>
+</section>
+<section id="anchor-boxes" class="level4">
+<h4 class="anchored" data-anchor-id="anchor-boxes">Anchor boxes</h4>
+<p>DeepAcoustics asks <strong>Do you already know how many anchor boxes you want to use?</strong></p>
+<ul>
+<li><strong>Yes:</strong> enter the number of anchor boxes directly.</li>
+<li><strong>No:</strong> DeepAcoustics calculates the best anchor boxes for every count from 1 to 15 and plots the results so you can choose.</li>
+</ul>
+<p>When you select <strong>No</strong>, here is what DeepAcoustics calculates:</p>
+<ol type="1">
+<li>For each number of anchors from 1 to 15, it groups the widths and heights of all the bounding boxes in your training images into that many clusters (using MATLAB’s <code>estimateAnchorBoxes</code>, a clustering method that groups boxes by how much they overlap). The center of each cluster becomes one anchor box shape.</li>
+<li>For each count, it calculates the <strong>mean IoU</strong>: how well, on average, each of your annotated boxes overlaps with its closest-matching anchor shape. A mean IoU of 1 would mean every box matched an anchor exactly.</li>
+<li>It plots <strong>Number of Anchors</strong> (x-axis) against <strong>Mean IoU</strong> (y-axis).</li>
+</ol>
+<p>Choose the number where the curve starts to level off (the “elbow”). Beyond that point, adding more anchors improves the fit only slightly while increasing computation. In this example, the curve rises steeply up to about 6 anchors and then flattens, and 6 anchors has also worked well for us in the past, so we enter <strong>6</strong>. We also recommend trying a few values and comparing the resulting networks.</p>
+<p>If the number you enter does not suit the architecture, DeepAcoustics rounds it up: Tiny YOLO and ResNet-50 need an even number, and CSP-DarkNet-53 needs a multiple of three. See <a href="./network_fundamentals.html#anchor-boxes">Anchor boxes</a> for how anchor boxes work and how to choose the number.</p>
+</section>
+<section id="solver-optimizer" class="level4">
+<h4 class="anchored" data-anchor-id="solver-optimizer">Solver (optimizer)</h4>
+<p>The solver, or optimizer, is the algorithm that adjusts the network’s weights during training to reduce the loss (the error between the network’s predictions and your annotations). DeepAcoustics offers three:</p>
+<ul>
+<li><strong>sgdm (stochastic gradient descent with momentum):</strong> after each mini-batch, takes a step in the direction that reduces the loss, using the same step size (learning rate) for every weight. “Momentum” carries over part of the previous steps, which smooths out the path and helps it keep moving in a consistent direction. It is simple and reliable but can need more epochs to converge.</li>
+<li><strong>rmsprop (root mean square propagation):</strong> adjusts the step size separately for each weight, based on how large that weight’s recent updates have been. Weights with large or erratic updates take smaller steps, and weights with small, steady updates take larger ones. This often makes training more stable. RMSProp has worked well for us, and we typically use it with its default learning rate.</li>
+<li><strong>adam (adaptive moment estimation):</strong> combines the two ideas above: it uses momentum like SGDM and adjusts each weight’s step size like RMSProp. It often converges quickly and is a common default in deep learning.</li>
+</ul>
+</section>
+<section id="initial-learning-rate" class="level4">
+<h4 class="anchored" data-anchor-id="initial-learning-rate">Initial learning rate</h4>
+<p>The learning rate sets how large a step the solver takes each time it updates the weights. The suggested defaults are <strong>0.01 for sgdm</strong> and <strong>0.001 for rmsprop and adam</strong>. A rate that is too high can make training unstable (the loss jumps around or grows); a rate that is too low makes training very slow. If training runs into problems with your computing resources, try a lower rate. This is a setting worth experimenting with.</p>
+</section>
+<section id="mini-batch-size" class="level4">
+<h4 class="anchored" data-anchor-id="mini-batch-size">Mini-batch size</h4>
+<p>During training, the training images are shuffled and divided into small groups called <strong>mini-batches</strong>. The network processes one mini-batch, calculates the average loss across those images, and then updates its weights once. Each of these updates is one <strong>iteration</strong>, so the number of iterations in one epoch is roughly the number of training images divided by the mini-batch size.</p>
+<ul>
+<li><strong>Larger mini-batches</strong> give a more stable estimate of which direction to adjust the weights and need fewer updates per epoch, but they use more GPU memory.</li>
+<li><strong>Smaller mini-batches</strong> use less memory and make more frequent, noisier updates.</li>
+</ul>
+<p>The default is <strong>16</strong>, because larger architectures such as CSP-DarkNet-53 can run out of memory with bigger mini-batches. Smaller networks such as Tiny YOLO can usually handle larger mini-batches, such as <strong>64</strong>.</p>
+</section>
+<section id="maximum-number-of-epochs" class="level4">
+<h4 class="anchored" data-anchor-id="maximum-number-of-epochs">Maximum number of epochs</h4>
+<p>An epoch is one complete pass through all of the training images (see <a href="./network_fundamentals.html#key-hyperparameters">Key hyperparameters</a>). The default maximum is <strong>30</strong>. More epochs give the network more chances to learn, but training too long can lead to overfitting, where the network memorizes the training images instead of learning patterns that generalize to new data. Watch the training progress window (below) and stop early if the validation loss starts to rise. In this example, we enter <strong>10</strong>.</p>
+</section>
+<section id="validation-data" class="level4">
+<h4 class="anchored" data-anchor-id="validation-data">Validation data</h4>
+<p>If you did not provide validation image tables, DeepAcoustics asks <strong>Would you like to use a proportion of your training data to validate (recommended to assess overfitting)?</strong></p>
+<ul>
+<li><strong>Yes:</strong> set aside part of your training images for validation. These images are not used to train the network; instead, the network is checked against them during training to show how well it handles data it has not learned from. This is what lets you spot overfitting.</li>
+<li><strong>No:</strong> train on all of the images without validation.</li>
+</ul>
+<p>The dialog also warns that, because of MATLAB data type limitations, using validation data may stop the training images from being reshuffled between epochs, which could itself contribute to overfitting.</p>
+<p>If you choose <strong>Yes</strong>, enter the <strong>proportion</strong> of your non-augmented training images to use for validation, as a decimal (the default is 0.1, or 10%). Augmented duplicates are never selected for validation. Studies have used validation proportions from about 10% up to 25%; we have found that about <strong>0.2 (20%)</strong> works well, and that is what this example uses.</p>
+<section id="how-the-validation-images-are-chosen" class="level5">
+<h5 class="anchored" data-anchor-id="how-the-validation-images-are-chosen">How the validation images are chosen</h5>
+<p>With a multiclass network, DeepAcoustics tries to make sure every call type is represented in the validation set:</p>
+<ol type="1">
+<li>It counts how many (non-augmented) training images contain each call type.</li>
+<li>It multiplies the count for the <strong>rarest</strong> call type by your proportion. This becomes the number of validation images for <strong>every</strong> call type, so each call type gets roughly the same number of validation images.</li>
+<li>Starting with the rarest call type, it randomly selects images containing each call type until that call type has its share. Because one image can contain several call types, images selected for one call type also count toward the others.</li>
+</ol>
+<p>DeepAcoustics then shows a <strong>Check Proportions</strong> dialog with the percentage of each call type’s images that ended up in the validation set. The rarest call type will be close to the proportion you entered, and more common call types will be lower, because they all receive about the same number of validation images. In this example, with a proportion of 0.2, call type A (the rarest) is at 19.8%, and the more common call types are between 4.8% and 7.9%. Click <strong>Yes</strong> to proceed (clicking <strong>No</strong> cancels training).</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="monitoring-training" class="level3">
+<h3 class="anchored" data-anchor-id="monitoring-training">Monitoring Training</h3>
+<p>Once the settings are confirmed, training begins and the <strong>Training Progress</strong> window opens.</p>
+<ul>
+<li><strong>TrainingLoss (blue line):</strong> the loss on the current mini-batch of training images, plotted at every iteration. It is usually very high at first and then drops quickly as the network starts to learn, before leveling off.</li>
+<li><strong>ValidationLoss (orange line):</strong> the loss on the validation images. It is calculated only every so often (every 50 iterations by default in MATLAB), so it appears as points joined by straight lines, which can look like a long straight line early in training.</li>
+<li><strong>Progress panel (right):</strong> shows the progress bar, start time, elapsed time, current epoch, iteration, and learning rate. The <strong>Export as Image</strong> button saves a picture of the plot.</li>
+</ul>
+<p>How to read the curves is explained in <a href="./network_fundamentals.html#key-hyperparameters">Key hyperparameters</a>. In short: if both losses fall together, the network is still learning; if both are low and stable, the fit is good; and if the validation loss starts to rise while the training loss keeps falling, the network is overfitting.</p>
+<section id="the-matlab-command-window" class="level4">
+<h4 class="anchored" data-anchor-id="the-matlab-command-window">The MATLAB Command Window</h4>
+<p>While training runs, MATLAB also prints a progress table in the Command Window. It starts by listing the call types (object classes) the network is being trained on, then adds a row every 30 iterations, plus a row each time the validation loss is calculated:</p>
+<pre><code>Epoch   Iteration   TimeElapsed   LearnRate   TrainingLoss   ValidationLoss
+  1         1        00:00:09       0.001        923.51          1380.1
+  1        30        00:01:47       0.001        42.379
+  2        50        00:02:51       0.001        26.871          31.749
+  ...
+  9       250        00:13:20       0.001        10.69           16.467
+ 10       300        00:15:56       0.001        8.3519          17.686
+ 10       310        00:16:27       0.001        8.2466          18.928</code></pre>
+<ul>
+<li><strong>Epoch:</strong> which pass through the training images the network is on.</li>
+<li><strong>Iteration:</strong> how many weight updates (mini-batches) have been completed so far. In this example, 10 epochs took 310 iterations, or about 31 iterations per epoch.</li>
+<li><strong>TimeElapsed:</strong> the time since training started (hours:minutes:seconds).</li>
+<li><strong>LearnRate:</strong> the learning rate in use. It stays at the initial learning rate you entered throughout training.</li>
+<li><strong>TrainingLoss:</strong> the loss on the current mini-batch of training images.</li>
+<li><strong>ValidationLoss:</strong> the loss on the validation images. It is only filled in on the rows where it was calculated (every 50 iterations, and at the end of training); it is blank on the other rows. If you did not use validation data, this column does not appear.</li>
+</ul>
+<p>When training is complete, MATLAB prints <strong>Detector training complete.</strong></p>
+<p>This table holds the same information as the Training Progress window, but as exact numbers, which makes it easier to see where the validation loss was lowest. In this example, the training loss keeps falling right to the end (from 923.51 to 8.2466), but the validation loss reaches its lowest value, 16.467, at iteration 250 (epoch 9) and then rises to 17.686 and 18.928. That rise while training loss keeps falling is an early sign of overfitting, and it suggests that about 9 epochs would have been enough for this dataset and these settings.</p>
+</section>
+<section id="early-stopping" class="level4">
+<h4 class="anchored" data-anchor-id="early-stopping">Early stopping</h4>
+<p><strong>Early stopping</strong> means ending training before the maximum number of epochs, at the point where the network performs best on the validation data. If the validation loss stops improving or starts to rise while the training loss keeps falling, further training is likely to make the network worse at handling new data. To stop early, click the <strong>stop button</strong> (the round button to the right of the progress bar). The network is kept as it was when you stopped, so stop near the point where the validation loss was lowest. You can also use what you see to choose a smaller number of epochs the next time you train.</p>
+</section>
+<section id="saving-the-network" class="level4">
+<h4 class="anchored" data-anchor-id="saving-the-network">Saving the network</h4>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Save the trained network
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When training finishes (or you stop it), DeepAcoustics opens a <strong>Save New Network</strong> dialog. <strong>You must save the network here</strong>, or the training will be lost. The network is saved as a <code>.mat</code> file, but the dialog does <strong>not</strong> suggest a file name, so give it a clear, descriptive name. For example, include the project or dataset, the architecture, the call types, and a version number, such as <code>OOI_Multiclass_TinyYOLO_6anchors_v1.mat</code>. Because training images, detections, and networks are all <code>.mat</code> files, a clear name makes it much easier to tell your networks apart later.</p>
+</div>
+</div>
+<p>The network <code>.mat</code> file stores the trained detector together with the training options and the spectrogram settings used to create the training images (window size, overlap, NFFT, frequency limits, sampling rate, and image length), so DeepAcoustics knows how the network’s images were made when you use it to detect calls. Save it in your networks folder so it appears in the <strong>Neural Networks</strong> list in the main window.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
