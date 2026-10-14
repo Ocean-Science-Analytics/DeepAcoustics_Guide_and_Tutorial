@@ -121,7 +121,7 @@ In this exercise, you create training images from the five training annotations 
 3.  **Point each file to its audio.** Because the files were created on another computer, DeepAcoustics asks you to **Select folder containing** each file's audio. The folder names match the instrument and date (or name) in each annotations file:
 
     | Annotations file | Audio folder |
-    |------------------------------------|------------------------------------|
+    |----|----|
     | `HYDBBA106OOI_170105_Blue_Train_Annotations.mat` | `HYDBBA106_20170105_Blue` |
     | `HYDBBA106OOI_170106_BlueFin_Train_Annotations.mat` | `HYDBBA106_20170106_BlueFin` |
     | `HYDBBA106OOI_170120_Blue_Train_Annotations.mat` | `HYDBBA106_20170120_Blue` |
