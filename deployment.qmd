@@ -35,15 +35,23 @@ Once you have a network that performs well on your test data (see [Performance T
 
 While the network runs, a progress bar shows:
 
-- **Detection Speed:** how many times faster than real time the audio is being processed. For example, 2000x means 2000 seconds of audio are processed every second. Tiny YOLO can reach about 2000x on long audio files. Larger architectures such as CSP-DarkNet-53 and ResNet-50 run more slowly, and the bandwidth (frequency range) of the network may also affect the speed.
+- **Detection Speed:** how many times faster than real time the audio is being processed. For example, 2000x means 2000 seconds of audio are processed every second. Tiny YOLO can reach about 2000x on long audio files. Larger architectures such as CSP-DarkNet-53 and ResNet-50 run more slowly, and the bandwidth (frequency range) of the network may also affect the speed. Your computing resources will also impact this speed.
+
+  ![](images/detection-speed.jpg){width="387"}
+
 - **Call Fragments Found:** the number of raw detections (fragments) found so far in the current file, before they are merged into calls (see [below](#how-call-fragments-are-merged)).
+
 - **File:** which audio file is being processed, out of the total number selected.
 
 The MATLAB Command Window also shows progress for each audio file:
 
 - **Freq cut-offs (given spec settings) set to X Hz and Y Hz:** the frequency range of the spectrograms the network is run on.
-- **N Calls found in: [audio file]:** the number of calls in that file after merging. Files with no detections are listed as **No Calls found in: [audio file]**.
+
+- **N Calls found in: \[audio file\]:** the number of calls in that file after merging. Files with no detections are listed as **No Calls found in: \[audio file\]**.
+
 - **Warnings** may appear if the audio has more than one channel (the channels are averaged) or if its sampling rate does not match the network (the audio is resampled or clipped to match the network's frequency range).
+
+  ![](images/matlab-command-calls.jpg){width="550"}
 
 #### Saving the detections
 
@@ -121,8 +129,14 @@ At the moment, DeepAcoustics does not show a confirmation when the date and time
 To check that the date and time were added:
 
 1.  Drag the detections file into the MATLAB Command Window (or double-click it in the MATLAB Current Folder panel) to load it into the workspace.
+
 2.  In the Workspace panel, double-click the **Calls** table.
+
+    ![](images/calls-table-open-to-check-datetime.jpg){width="267"}
+
 3.  Scroll to the right to the **StTime** column and check that it contains the date and time of each call.
+
+    ![](images/add-date-time.jpg){width="584"}
 
 ------------------------------------------------------------------------
 
@@ -138,7 +152,10 @@ You can export the detections to a Raven selection table (`.txt`) to view them i
 #### Selection Table vs. Sound Selection Table
 
 - **Selection Table:** the original (legacy) Raven format. Begin and end times are counted continuously across all of the audio files in the detections file, as if they were one long recording. This matches how Raven displays a set of audio files opened together, so open all of the audio files in Raven and then open the table.
+
 - **Sound Selection Table:** begin and end times are counted from the start of each call's own audio file, and the table lists the audio file for each call, so Raven can open the audio from the table. Raven will not load audio files that have no detections when you open a Sound Selection Table.
+
+  ![](images/save-selection-table.jpg){width="394"}
 
 #### What is exported
 

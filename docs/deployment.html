@@ -274,15 +274,17 @@ ul.task-list li input[type="checkbox"] {
 <h4 class="anchored" data-anchor-id="monitoring-progress">Monitoring progress</h4>
 <p>While the network runs, a progress bar shows:</p>
 <ul>
-<li><strong>Detection Speed:</strong> how many times faster than real time the audio is being processed. For example, 2000x means 2000 seconds of audio are processed every second. Tiny YOLO can reach about 2000x on long audio files. Larger architectures such as CSP-DarkNet-53 and ResNet-50 run more slowly, and the bandwidth (frequency range) of the network may also affect the speed.</li>
-<li><strong>Call Fragments Found:</strong> the number of raw detections (fragments) found so far in the current file, before they are merged into calls (see <a href="#how-call-fragments-are-merged">below</a>).</li>
-<li><strong>File:</strong> which audio file is being processed, out of the total number selected.</li>
+<li><p><strong>Detection Speed:</strong> how many times faster than real time the audio is being processed. For example, 2000x means 2000 seconds of audio are processed every second. Tiny YOLO can reach about 2000x on long audio files. Larger architectures such as CSP-DarkNet-53 and ResNet-50 run more slowly, and the bandwidth (frequency range) of the network may also affect the speed. Your computing resources will also impact this speed.</p>
+<p><img src="images/detection-speed.jpg" class="img-fluid" width="387"></p></li>
+<li><p><strong>Call Fragments Found:</strong> the number of raw detections (fragments) found so far in the current file, before they are merged into calls (see <a href="#how-call-fragments-are-merged">below</a>).</p></li>
+<li><p><strong>File:</strong> which audio file is being processed, out of the total number selected.</p></li>
 </ul>
 <p>The MATLAB Command Window also shows progress for each audio file:</p>
 <ul>
-<li><strong>Freq cut-offs (given spec settings) set to X Hz and Y Hz:</strong> the frequency range of the spectrograms the network is run on.</li>
-<li><strong>N Calls found in: [audio file]:</strong> the number of calls in that file after merging. Files with no detections are listed as <strong>No Calls found in: [audio file]</strong>.</li>
-<li><strong>Warnings</strong> may appear if the audio has more than one channel (the channels are averaged) or if its sampling rate does not match the network (the audio is resampled or clipped to match the network’s frequency range).</li>
+<li><p><strong>Freq cut-offs (given spec settings) set to X Hz and Y Hz:</strong> the frequency range of the spectrograms the network is run on.</p></li>
+<li><p><strong>N Calls found in: [audio file]:</strong> the number of calls in that file after merging. Files with no detections are listed as <strong>No Calls found in: [audio file]</strong>.</p></li>
+<li><p><strong>Warnings</strong> may appear if the audio has more than one channel (the channels are averaged) or if its sampling rate does not match the network (the audio is resampled or clipped to match the network’s frequency range).</p>
+<p><img src="images/matlab-command-calls.jpg" class="img-fluid" width="550"></p></li>
 </ul>
 </section>
 <section id="saving-the-detections" class="level4">
@@ -362,9 +364,11 @@ ul.task-list li input[type="checkbox"] {
 <p>At the moment, DeepAcoustics does not show a confirmation when the date and time have been added. If the file names could not be read, a warning appears in the MATLAB Command Window (<strong>Date/time format not recognizable - please use YYMMDD.*HHMMSS</strong>), and the calls are left without a date and time.</p>
 <p>To check that the date and time were added:</p>
 <ol type="1">
-<li>Drag the detections file into the MATLAB Command Window (or double-click it in the MATLAB Current Folder panel) to load it into the workspace.</li>
-<li>In the Workspace panel, double-click the <strong>Calls</strong> table.</li>
-<li>Scroll to the right to the <strong>StTime</strong> column and check that it contains the date and time of each call.</li>
+<li><p>Drag the detections file into the MATLAB Command Window (or double-click it in the MATLAB Current Folder panel) to load it into the workspace.</p></li>
+<li><p>In the Workspace panel, double-click the <strong>Calls</strong> table.</p>
+<p><img src="images/calls-table-open-to-check-datetime.jpg" class="img-fluid" width="267"></p></li>
+<li><p>Scroll to the right to the <strong>StTime</strong> column and check that it contains the date and time of each call.</p>
+<p><img src="images/add-date-time.jpg" class="img-fluid" width="584"></p></li>
 </ol>
 <hr>
 </section>
@@ -381,8 +385,9 @@ ul.task-list li input[type="checkbox"] {
 <section id="selection-table-vs.-sound-selection-table" class="level4">
 <h4 class="anchored" data-anchor-id="selection-table-vs.-sound-selection-table">Selection Table vs.&nbsp;Sound Selection Table</h4>
 <ul>
-<li><strong>Selection Table:</strong> the original (legacy) Raven format. Begin and end times are counted continuously across all of the audio files in the detections file, as if they were one long recording. This matches how Raven displays a set of audio files opened together, so open all of the audio files in Raven and then open the table.</li>
-<li><strong>Sound Selection Table:</strong> begin and end times are counted from the start of each call’s own audio file, and the table lists the audio file for each call, so Raven can open the audio from the table. Raven will not load audio files that have no detections when you open a Sound Selection Table.</li>
+<li><p><strong>Selection Table:</strong> the original (legacy) Raven format. Begin and end times are counted continuously across all of the audio files in the detections file, as if they were one long recording. This matches how Raven displays a set of audio files opened together, so open all of the audio files in Raven and then open the table.</p></li>
+<li><p><strong>Sound Selection Table:</strong> begin and end times are counted from the start of each call’s own audio file, and the table lists the audio file for each call, so Raven can open the audio from the table. Raven will not load audio files that have no detections when you open a Sound Selection Table.</p>
+<p><img src="images/save-selection-table.jpg" class="img-fluid" width="394"></p></li>
 </ul>
 </section>
 <section id="what-is-exported" class="level4">

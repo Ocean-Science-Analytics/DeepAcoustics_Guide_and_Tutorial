@@ -246,10 +246,10 @@ ul.task-list li input[type="checkbox"] {
 <section id="the-workflow" class="level3">
 <h3 class="anchored" data-anchor-id="the-workflow">The Workflow</h3>
 <ol type="1">
-<li><p><strong><a href="./image_creation.html">Creating Training Images</a>:</strong> convert your annotated audio into spectrogram images, each paired with the bounding boxes of the calls it contains. The spectrogram and image settings you choose here have a large effect on how well the network performs.</p></li>
-<li><p><strong><a href="./train.html">Network Training</a>:</strong> train a detection network on those images. You choose the base network (Tiny YOLO, CSP-DarkNet-53, or ResNet-50, which are pre-trained, or a blank ResNet-50 that is still being evaluated), the anchor boxes, and the training settings, and watch the training and validation loss as the network learns.</p></li>
-<li><p><strong><a href="./test.html">Performance Testing</a>:</strong> run the trained network on a separate, annotated test dataset and compare its detections with your annotations, using precision, recall, F1-score, average precision, mAP, and a confusion matrix.</p></li>
-<li><p><strong><a href="./deployment.html">Network Deployment</a>:</strong> use the network to detect calls in new audio, add the date and time to each detection, and export the detections to a Raven selection table.</p></li>
+<li><p><a href="./image_creation.html"><strong>Creating Training Images</strong></a><strong>:</strong> convert your annotated audio into spectrogram images, each paired with the bounding boxes of the calls it contains. The spectrogram and image settings you choose here have a large effect on how well the network performs.</p></li>
+<li><p><a href="./train.html"><strong>Network Training</strong></a><strong>:</strong> train a detection network on those images. You choose the base network (Tiny YOLO, CSP-DarkNet-53, or ResNet-50, which are pre-trained, or a blank ResNet-50 that is still being evaluated), the anchor boxes, and the training settings, and watch the training and validation loss as the network learns.</p></li>
+<li><p><a href="./test.html"><strong>Performance Testing</strong></a><strong>:</strong> run the trained network on a separate, annotated test dataset and compare its detections with your annotations, using precision, recall, F1-score, average precision, mAP, and a confusion matrix.</p></li>
+<li><p><a href="./deployment.html"><strong>Network Deployment</strong></a><strong>:</strong> use the network to detect calls in new audio, add the date and time to each detection, and export the detections to a Raven selection table.</p></li>
 </ol>
 <hr>
 </section>

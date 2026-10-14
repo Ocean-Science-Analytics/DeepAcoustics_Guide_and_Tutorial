@@ -8,13 +8,13 @@ Once your data are annotated and reviewed, you can train a deep learning network
 
 ### The Workflow
 
-1.  **[Creating Training Images](image_creation.qmd):** convert your annotated audio into spectrogram images, each paired with the bounding boxes of the calls it contains. The spectrogram and image settings you choose here have a large effect on how well the network performs.
+1.  [**Creating Training Images**](image_creation.qmd)**:** convert your annotated audio into spectrogram images, each paired with the bounding boxes of the calls it contains. The spectrogram and image settings you choose here have a large effect on how well the network performs.
 
-2.  **[Network Training](train.qmd):** train a detection network on those images. You choose the base network (Tiny YOLO, CSP-DarkNet-53, or ResNet-50, which are pre-trained, or a blank ResNet-50 that is still being evaluated), the anchor boxes, and the training settings, and watch the training and validation loss as the network learns.
+2.  [**Network Training**](train.qmd)**:** train a detection network on those images. You choose the base network (Tiny YOLO, CSP-DarkNet-53, or ResNet-50, which are pre-trained, or a blank ResNet-50 that is still being evaluated), the anchor boxes, and the training settings, and watch the training and validation loss as the network learns.
 
-3.  **[Performance Testing](test.qmd):** run the trained network on a separate, annotated test dataset and compare its detections with your annotations, using precision, recall, F1-score, average precision, mAP, and a confusion matrix.
+3.  [**Performance Testing**](test.qmd)**:** run the trained network on a separate, annotated test dataset and compare its detections with your annotations, using precision, recall, F1-score, average precision, mAP, and a confusion matrix.
 
-4.  **[Network Deployment](deployment.qmd):** use the network to detect calls in new audio, add the date and time to each detection, and export the detections to a Raven selection table.
+4.  [**Network Deployment**](deployment.qmd)**:** use the network to detect calls in new audio, add the date and time to each detection, and export the detections to a Raven selection table.
 
 ------------------------------------------------------------------------
 
