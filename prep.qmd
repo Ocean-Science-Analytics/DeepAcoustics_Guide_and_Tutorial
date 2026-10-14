@@ -54,7 +54,7 @@ DeepAcoustics reads Raven selection tables saved as tab-delimited `.txt` files (
 The table below describes each column in a typical Raven Pro selection table and how DeepAcoustics uses it during import.
 
 | Column | Use in DeepAcoustics | Description |
-|------------------------|------------------------|------------------------|
+|----|----|----|
 | Selection | Not used | Raven's ID number for each selection. Can be left in the table. |
 | View | Not used | The Raven view the selection was made in (for example, "Spectrogram 1"). Can be left in the table. |
 | Channel | Not used | The audio channel the selection was made on. DeepAcoustics always reads channel 1 of multichannel audio. |
@@ -80,7 +80,6 @@ If your selection table spans multiple audio files (for example, a day of 5-minu
 ***NOTE:*** Once you have a set of audio files annotated, eliminating specific files from a folder can be problematic on the Raven and DeepAcoustics end. It is best to annotate once your dataset (or subset) is selected to avoid additional data management steps.
 :::
 
-
 {{< video videos/Raven-annotate-save-selection-table.mp4 >}}
 
 ------------------------------------------------------------------------
@@ -102,6 +101,5 @@ If you prefer, you can create annotations directly in DeepAcoustics instead of u
 ![](images/draw-label-change.jpg){fig-align="center" width="438"}
 
 5.  **Save your annotations.** When you finish, select **Save Session**. Your annotations are saved in a DeepAcoustics detections file (`.mat`), which can be used for training and testing just like an imported Raven selection table.
-
 
 {{< video videos/annotate-in-DA.mp4 >}}

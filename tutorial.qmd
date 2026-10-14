@@ -14,6 +14,12 @@ The tutorial data are a small subset of a larger Dryad repository, which contain
 
 - **Annotated training and evaluation data and DeepAcoustics-derived networks for multi-class baleen whale calls** (doi: <https://doi.org/10.5061/dryad.x0k6djj2d>)
 
+Data Sources:
+
+- NOAA Office of National Marine Sanctuaries, and US Navy (2021). Humpback Whale Sound Production Recorded at SanctSound Site MB01_06, SanctSound Data Products. NOAA National Centers for Environmental Information. (Accessed 18 February 2026).
+
+- NSF Ocean Observatories Initiative (n.d.). Coastal Endurance Array, Oregon Offshore and Oregon Shelf Cabled Benthic Experiment Packages, Broadband Hydrophone (CE04OSBP-LJ01C-11-HYDBBA105; CE02SHBP-LJ01D-11-HYDBBA106) data. OOI Raw Data Archive. <https://rawdata.oceanobservatories.org/files/.> Accessed 2020.
+
 #### Downloading the data
 
 Download the **tutorial_data** folder from the [DeepAcoustics Guide and Tutorial GitHub repository](https://github.com/Ocean-Science-Analytics/DeepAcoustics_Guide_and_Tutorial/tree/master/tutorial_data). Save it somewhere easy to find, such as your Documents folder, and keep the folder structure as it is.
@@ -59,12 +65,14 @@ In this exercise, you open the test annotations, adjust the display so the calls
 1.  **Set the audio folder.** Go to **File \> Select Audio Folder** and select **OOI_Multiclass \> 03_Testing \> 01_OOI_2017_Feb_03**.
 
 2.  **Load the test annotations.** Go to **File \> Load Detections** and select **03_Testing \> HYDDBA105OOI_20170203_Test_Detections.mat**.
+
     - The file contains four call types: **18 Hz**, **20 Hz**, **A**, and **B**. Click **Select all** and then **OK**.
     - If DeepAcoustics cannot find the audio, it asks you to select the folder containing the audio files. Select **01_OOI_2017_Feb_03**.
 
 3.  **Choose a starting audio file.** Select the first audio file (`HYDDBA105OOI_20170203-020000.wav`) and click **OK**.
 
 4.  **Adjust the display settings.** Select **Display Settings** and enter:
+
     - **Frequency Lower Limit (Hz):** 0
     - **Frequency Upper Limit (Hz):** 200 (half of the 400 Hz sampling rate)
     - **Units of Spectrogram Parameters:** Samples
@@ -74,16 +82,19 @@ In this exercise, you open the test annotations, adjust the display so the calls
     - Click **OK**. The spectrograms are redrawn with the new settings.
 
 5.  **Adjust the Focus and Page durations.**
+
     - **Page:** set to **300** seconds, the full length of each audio file, so the lower panel shows the whole file and where all of its calls fall.
     - **Focus:** set to **120** seconds. This suits blue and fin whale calls: it is long enough to show whole blue whale B calls, which can last up to about 20 seconds, along with a series of fin whale pulses. Shorten it to look closely at individual fin whale pulses.
     - These are suggestions; adjust both to whatever works best for you.
 
 6.  **Adjust the color limits and color map.**
+
     - Use **+** and **-** beside **Low Color Limit** and **High Color Limit** until the calls stand out clearly from the background noise.
     - Try a different **Color Map** to see which makes the calls easiest to see.
     - Check that you can see the calls and their boxes in both the upper (focus) and lower (page) panels.
 
 7.  **Move from call to call.** Use the **Navigation** panel at the bottom of the window to step through the calls.
+
     - Move to the next or previous call, and notice how the call details on the left of the window update for each call.
     - Use the pink file buttons to move to the next audio file, or to the next audio file that contains a call.
     - Type a call number in the box at the top left of the window to jump straight to that call.
@@ -110,7 +121,7 @@ In this exercise, you create training images from the five training annotations 
 3.  **Point each file to its audio.** Because the files were created on another computer, DeepAcoustics asks you to **Select folder containing** each file's audio. The folder names match the instrument and date (or name) in each annotations file:
 
     | Annotations file | Audio folder |
-    |----|----|
+    |------------------------------------|------------------------------------|
     | `HYDBBA106OOI_170105_Blue_Train_Annotations.mat` | `HYDBBA106_20170105_Blue` |
     | `HYDBBA106OOI_170106_BlueFin_Train_Annotations.mat` | `HYDBBA106_20170106_BlueFin` |
     | `HYDBBA106OOI_170120_Blue_Train_Annotations.mat` | `HYDBBA106_20170120_Blue` |
@@ -123,6 +134,7 @@ In this exercise, you create training images from the five training annotations 
 4.  **Choose the call types.** For each file, click **Select all** and then **OK**.
 
 5.  **Enter the training image settings.** In the **Settings for Training Images** dialog, enter:
+
     - **Units of Spectrogram Parameters:** Samples
     - **Low Frequency Cutoff (Hz):** 0
     - **High Frequency Cutoff (Hz):** 200
@@ -139,6 +151,7 @@ In this exercise, you create training images from the five training annotations 
 6.  **Select the output folder.** Select **01_Training \> 02_Images**.
 
 7.  **Review the summary and save the image table.** When the images are done, read the summary of calls, split calls, and noise (see [Understanding the summary](image_creation.qmd#understanding-the-summary)), and save the image table (`_Images.mat`) in the **01_Training** folder.
+
     - Do not move or rename the **02_Images** folder afterward, because the image table stores the location of each image.
 
 #### Part B: Train the network
@@ -146,11 +159,13 @@ In this exercise, you create training images from the five training annotations 
 8.  **Open the tool.** Go to **Tools \> Network Training \> Train Detection Network** and select the image table you just saved.
 
 9.  **Answer the setup questions.**
+
     - **Do you have Validation Image Tables, too?** No
     - **Train from existing network?** No
     - **Call Types Warning:** check that the list shows 18 Hz, 20 Hz, A, B, and Noise, and click **Yes**.
 
 10. **Choose the training settings.**
+
     - **Base network:** Tiny YOLO. It is the fastest to train; you can try the other architectures later.
     - **Reduce image resolution?** No, unless your GPU has crashed before.
     - **Customize or Defaults:** Customize.
@@ -216,6 +231,7 @@ The Pacific LF network was trained on far more annotated data than the small tra
 2.  **Open the tool.** Go to **Tools \> Performance Metrics**.
 
 3.  **Select the ground-truth file.** Select **03_Testing \> HYDDBA105OOI_20170203_Test_Detections.mat**.
+
     - If DeepAcoustics asks for the audio folder, select **03_Testing \> 01_OOI_2017_Feb_03**.
 
 4.  **Choose the call types.** Click **Select all** and then **OK**.
@@ -229,6 +245,7 @@ The Pacific LF network was trained on far more annotated data than the small tra
 8.  **Set the true positive threshold.** Enter the IoU threshold a detection must reach to count as correct (see [True Positive Threshold](test.qmd#true-positive-threshold)). Try **0.1** (detecting the call at all) and then run the test again with **0.5** (detecting the call moderately well) to see how the results change.
 
 9.  **Review the results.** Look at the precision-recall curve and **P/R Result** for each call type, and the confusion matrix (see [Understanding the Results](test.qmd#understanding-the-results)).
+
     - Which call types does the network detect well, and which are harder?
     - Which call types does it confuse with each other, or with noise?
 
@@ -248,6 +265,7 @@ The test file only contains annotations for 18 Hz, 20 Hz, A, and B. You will the
 :::
 
 10. **Save the results.** Save the performance metrics file and the network's detections in **02_Networks \> tiny_YOLO \> Detections_and_Performance**.
+
     - Rename both files to include the test file, the network, and the IoU threshold, for example `OOI_20170203_Test_TinyYOLO_IoU0.1_PerformanceMetrics.mat`.
 
 11. **Record the results.** Fill in the test results for this network in **Network_Settings_Template.xlsx**.
@@ -275,12 +293,14 @@ In this exercise, you run a trained multiclass network on 24 audio files from Sa
 6.  **Select the output folder.** Select **05_Deployment_Call_Review**.
 
 7.  **Enter the settings for running the network.**
+
     - **Total Analysis Length (Seconds; 0 = Full Duration):** 0
     - **Score Threshold (0-1):** 0 keeps every detection. Try a higher value, such as 0.5, to keep only the more confident detections.
     - **Append Date to FileName (1 = yes):** 0, or 1 to add the date and time of the run to the file name.
     - Click **OK**.
 
 8.  **Watch the progress.** Each file is about 6 hours long, so this is about 144 hours of audio.
+
     - The progress bar shows the **Detection Speed** and the number of **Call Fragments Found** in each file.
     - The MATLAB Command Window shows the number of calls found in each file.
 
@@ -293,6 +313,7 @@ In this exercise, you run a trained multiclass network on 24 audio files from Sa
 11. **Confirm the overwrite warning.** Click **Yes**.
 
 12. **Select the detections file** you created in Part A.
+
     - DeepAcoustics reads the start date and time of each audio file from its name. For example, `SanctSound_MB01_06_671617061_201110004754.wav` started on 2020-11-10 at 00:47:54.
 
 13. **Check the date and time.** Drag the detections file into the MATLAB Command Window, double-click the **Calls** table in the Workspace panel, and scroll right to the **StTime** column to check that each call has a date and time.
@@ -304,6 +325,7 @@ In this exercise, you run a trained multiclass network on 24 audio files from Sa
 15. **Adjust the display.** Use the display settings from Exercise 1. Because these files are about 6 hours long, use a shorter **Page** duration (for example, 300 seconds) and move through each file page by page.
 
 16. **Review the calls.** Accept correct detections (**a**), reject false positives (**r**), and relabel calls with the wrong call type (see [Annotation Review](annotate.qmd)).
+
     - To review many detections at once, use **Tools \> Call Review**.
 
 17. **Save your review.** Select **Save Session** and save the reviewed detections under a new file name.
