@@ -18,13 +18,7 @@ DeepAcoustics offers three pre-trained YOLOv4 backbone architectures. TinyYOLO a
 | CSP-DarkNet-53 | 363    | 64.4 million | 3               | COCO          |
 | ResNet-50      | 177    | 25.6 million | 2               | ImageNet      |
 
-TinyYOLO is the lightest and fastest to train, making it the natural starting point for optimizing other settings before moving to the larger architectures. CSP-DarkNet-53 is the largest and most complex of the three, with roughly five times TinyYOLO's parameter count and an additional detection head. ResNet-50 sits in between, and additionally requires a fixed 224×224 input resolution (TinyYOLO and CSP-DarkNet-53 instead require an input resolution that is a multiple of 32 pixels).
-
-::: callout-note
-#### Guide media placeholder
-
-Short clip or annotated image walking through the trade-offs between the three architectures. To be added once available.
-:::
+TinyYOLO is the lightest and fastest to train, making it the natural starting point for optimizing other settings before moving to the larger architectures. CSP-DarkNet-53 is the largest and most complex of the three, with roughly five times TinyYOLO's parameter count and an additional detection head. ResNet-50 sits in between, and additionally requires a fixed 224×224 input resolution (TinyYOLO and CSP-DarkNet-53 instead require an input resolution that is a multiple of 32 pixels).ectures. To be added once available.
 
 ------------------------------------------------------------------------
 

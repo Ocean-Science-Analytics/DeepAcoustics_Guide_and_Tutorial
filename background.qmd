@@ -64,6 +64,10 @@ References
 
 - Mellinger, D. K., & Clark, C. W. (2000). Recognizing transient low-frequency whale sounds by spectrogram correlation. *The Journal of the Acoustical Society of America*, *107*(6), 3518-3529.
 
+- NOAA Office of National Marine Sanctuaries, and US Navy (2021). Humpback Whale Sound Production Recorded at SanctSound Site MB01_06, SanctSound Data Products. NOAA National Centers for Environmental Information. (Accessed 18 February 2026).
+
+- NSF Ocean Observatories Initiative (n.d.). Coastal Endurance Array, Oregon Offshore and Oregon Shelf Cabled Benthic Experiment Packages, Broadband Hydrophone (CE04OSBP-LJ01C-11-HYDBBA105; CE02SHBP-LJ01D-11-HYDBBA106) data. OOI Raw Data Archive. <https://rawdata.oceanobservatories.org/files/.> Accessed 2020.
+
 - Padovese, B., Kirsebom, O. S., Frazao, F., Evers, C. H., Beslin, W. A., Theriault, J., et al. (2023). Adapting deep learning models to new acoustic environments: a case study on the North Atlantic right whale upcall. *Ecological Informatics*, *77*, 102169.
 
 - Redmon, J., Divvala, S., Girshick, R., & Farhadi, A. (2016). You only look once: Unified, real-time object detection. *Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)*, 779-788.
